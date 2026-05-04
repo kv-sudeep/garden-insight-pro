@@ -1,0 +1,102 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import { MobileLayout } from "@/components/MobileLayout";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+
+export const Route = createFileRoute("/library/")({
+  head: () => ({
+    meta: [
+      { title: "Plant Care Library — Plant Doctor" },
+      { name: "description", content: "Care guides and disease info for popular plants." },
+    ],
+  }),
+  component: Library,
+});
+
+type Plant = {
+  id: string;
+  name: string;
+  scientific_name: string | null;
+  category: string | null;
+};
+
+function Library() {
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [q, setQ] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("plant_library")
+      .select("id, name, scientific_name, category")
+      .order("name")
+      .then(({ data }) => setPlants((data as Plant[]) ?? []));
+  }, []);
+
+  const filtered = useMemo(
+    () =>
+      plants.filter((p) =>
+        (p.name + " " + (p.scientific_name ?? "")).toLowerCase().includes(q.toLowerCase())
+      ),
+    [plants, q]
+  );
+
+  const grouped = useMemo(() => {
+    const g: Record<string, Plant[]> = {};
+    for (const p of filtered) {
+      const k = p.category ?? "Other";
+      (g[k] ??= []).push(p);
+    }
+    return g;
+  }, [filtered]);
+
+  return (
+    <MobileLayout>
+      <div className="px-6 pt-10">
+        <h1 className="text-2xl font-bold">Plant library</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Care guides and common diseases.</p>
+
+        <div className="relative mt-4">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search plants…"
+            className="h-12 rounded-2xl border-border bg-card pl-10"
+          />
+        </div>
+
+        <div className="mt-6 space-y-6">
+          {Object.entries(grouped).map(([cat, list]) => (
+            <div key={cat}>
+              <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {cat}
+              </h2>
+              <div className="space-y-2">
+                {list.map((p) => (
+                  <Link
+                    key={p.id}
+                    to="/library/$plantId"
+                    params={{ plantId: p.id }}
+                    className="flex items-center justify-between rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
+                  >
+                    <div>
+                      <div className="font-semibold">{p.name}</div>
+                      {p.scientific_name && (
+                        <div className="text-xs italic text-muted-foreground">
+                          {p.scientific_name}
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-leaf">›</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </MobileLayout>
+  );
+}
