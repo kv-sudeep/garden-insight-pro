@@ -14,7 +14,143 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      garden_plants: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          image_url: string | null
+          last_scan_id: string | null
+          name: string
+          notes: string | null
+          species: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          image_url?: string | null
+          last_scan_id?: string | null
+          name: string
+          notes?: string | null
+          species?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          image_url?: string | null
+          last_scan_id?: string | null
+          name?: string
+          notes?: string | null
+          species?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "garden_plants_last_scan_id_fkey"
+            columns: ["last_scan_id"]
+            isOneToOne: false
+            referencedRelation: "scans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plant_library: {
+        Row: {
+          category: string | null
+          common_diseases: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          scientific_name: string | null
+          soil: string | null
+          sunlight: string | null
+          water: string | null
+        }
+        Insert: {
+          category?: string | null
+          common_diseases?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          scientific_name?: string | null
+          soil?: string | null
+          sunlight?: string | null
+          water?: string | null
+        }
+        Update: {
+          category?: string | null
+          common_diseases?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          scientific_name?: string | null
+          soil?: string | null
+          sunlight?: string | null
+          water?: string | null
+        }
+        Relationships: []
+      }
+      scans: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          device_id: string
+          disease_name: string | null
+          id: string
+          image_url: string
+          is_healthy: boolean | null
+          organic_treatment: string | null
+          plant_name: string | null
+          prevention: string | null
+          raw: Json | null
+          severity: string | null
+          shop_query: string | null
+          symptoms: string | null
+          treatment: string | null
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          device_id: string
+          disease_name?: string | null
+          id?: string
+          image_url: string
+          is_healthy?: boolean | null
+          organic_treatment?: string | null
+          plant_name?: string | null
+          prevention?: string | null
+          raw?: Json | null
+          severity?: string | null
+          shop_query?: string | null
+          symptoms?: string | null
+          treatment?: string | null
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          device_id?: string
+          disease_name?: string | null
+          id?: string
+          image_url?: string
+          is_healthy?: boolean | null
+          organic_treatment?: string | null
+          plant_name?: string | null
+          prevention?: string | null
+          raw?: Json | null
+          severity?: string | null
+          shop_query?: string | null
+          symptoms?: string | null
+          treatment?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
