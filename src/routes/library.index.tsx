@@ -79,6 +79,34 @@ function Library() {
           />
         </div>
 
+        {categories.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveCat(null)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeCat === null
+                  ? "bg-leaf text-leaf-foreground"
+                  : "bg-card text-muted-foreground hover:bg-secondary"
+              }`}
+            >
+              All
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCat(cat)}
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                  activeCat === cat
+                    ? "bg-leaf text-leaf-foreground"
+                    : "bg-card text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="mt-6 space-y-6">
           {Object.entries(grouped).map(([cat, list]) => (
             <div key={cat}>
