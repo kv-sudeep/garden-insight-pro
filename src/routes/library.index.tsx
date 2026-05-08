@@ -34,12 +34,24 @@ function Library() {
       .then(({ data }) => setPlants((data as Plant[]) ?? []));
   }, []);
 
+  const [activeCat, setActiveCat] = useState<string | null>(null);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of plants) set.add(p.category ?? "Other");
+    return Array.from(set).sort();
+  }, [plants]);
+
   const filtered = useMemo(
     () =>
-      plants.filter((p) =>
-        (p.name + " " + (p.scientific_name ?? "")).toLowerCase().includes(q.toLowerCase())
-      ),
-    [plants, q]
+      plants.filter((p) => {
+        const matchesQ = (p.name + " " + (p.scientific_name ?? ""))
+          .toLowerCase()
+          .includes(q.toLowerCase());
+        const matchesCat = !activeCat || (p.category ?? "Other") === activeCat;
+        return matchesQ && matchesCat;
+      }),
+    [plants, q, activeCat]
   );
 
   const grouped = useMemo(() => {
