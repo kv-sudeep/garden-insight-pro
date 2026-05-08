@@ -34,12 +34,24 @@ function Library() {
       .then(({ data }) => setPlants((data as Plant[]) ?? []));
   }, []);
 
+  const [activeCat, setActiveCat] = useState<string | null>(null);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of plants) set.add(p.category ?? "Other");
+    return Array.from(set).sort();
+  }, [plants]);
+
   const filtered = useMemo(
     () =>
-      plants.filter((p) =>
-        (p.name + " " + (p.scientific_name ?? "")).toLowerCase().includes(q.toLowerCase())
-      ),
-    [plants, q]
+      plants.filter((p) => {
+        const matchesQ = (p.name + " " + (p.scientific_name ?? ""))
+          .toLowerCase()
+          .includes(q.toLowerCase());
+        const matchesCat = !activeCat || (p.category ?? "Other") === activeCat;
+        return matchesQ && matchesCat;
+      }),
+    [plants, q, activeCat]
   );
 
   const grouped = useMemo(() => {
@@ -66,6 +78,34 @@ function Library() {
             className="h-12 rounded-2xl border-border bg-card pl-10"
           />
         </div>
+
+        {categories.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              onClick={() => setActiveCat(null)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeCat === null
+                  ? "bg-leaf text-leaf-foreground"
+                  : "bg-card text-muted-foreground hover:bg-secondary"
+              }`}
+            >
+              All
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCat(cat)}
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                  activeCat === cat
+                    ? "bg-leaf text-leaf-foreground"
+                    : "bg-card text-muted-foreground hover:bg-secondary"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="mt-6 space-y-6">
           {Object.entries(grouped).map(([cat, list]) => (
