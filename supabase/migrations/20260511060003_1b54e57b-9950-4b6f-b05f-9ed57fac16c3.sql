@@ -1,0 +1,1 @@
+ALTER TABLE public.garden_plants ADD COLUMN IF NOT EXISTS category text;
