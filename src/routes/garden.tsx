@@ -172,12 +172,36 @@ function Garden() {
 
   async function bulkDelete() {
     if (selected.size === 0) return;
-    if (!confirm(`Remove ${selected.size} plant${selected.size === 1 ? "" : "s"}?`)) return;
     const ids = Array.from(selected);
+    const removed = plants.filter((p) => selected.has(p.id));
     const { error } = await supabase.from("garden_plants").delete().in("id", ids);
     if (error) return toast.error(error.message);
     setPlants((p) => p.filter((x) => !selected.has(x.id)));
     setSelected(new Set());
+    toast(`Removed ${removed.length} plant${removed.length === 1 ? "" : "s"}`, {
+      duration: 6000,
+      action: {
+        label: "Undo",
+        onClick: async () => {
+          const rows = removed.map((r) => ({
+            id: r.id,
+            name: r.name,
+            species: r.species,
+            image_url: r.image_url,
+            notes: r.notes,
+            category: r.category,
+            created_at: r.created_at,
+            device_id: getDeviceId(),
+          }));
+          const { error: insErr } = await supabase.from("garden_plants").insert(rows);
+          if (insErr) return toast.error(insErr.message);
+          setPlants((ps) =>
+            [...removed, ...ps].sort((a, b) => b.created_at.localeCompare(a.created_at))
+          );
+          toast.success("Restored");
+        },
+      },
+    });
     setSelecting(false);
     toast.success("Removed");
   }
