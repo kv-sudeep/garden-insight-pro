@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Sprout, Trash2, Pencil, Check, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Sprout, Trash2, Pencil, Check, X, Search, Droplets, FlowerIcon, Sparkles } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
@@ -27,12 +28,22 @@ type Plant = {
   created_at: string;
 };
 
+type SortKey = "newest" | "oldest" | "name-asc" | "name-desc";
+
+const NOTE_TEMPLATES: { label: string; icon: typeof Droplets; text: () => string }[] = [
+  { label: "Watered", icon: Droplets, text: () => `Watered on ${new Date().toLocaleDateString()}` },
+  { label: "Repotted", icon: FlowerIcon, text: () => `Repotted on ${new Date().toLocaleDateString()}` },
+  { label: "Fertilized", icon: Sparkles, text: () => `Fertilized on ${new Date().toLocaleDateString()}` },
+];
+
 function Garden() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draftName, setDraftName] = useState("");
   const [draftNotes, setDraftNotes] = useState("");
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<SortKey>("newest");
 
   async function load() {
     const { data } = await supabase
@@ -66,6 +77,10 @@ function Garden() {
     setEditingId(null);
   }
 
+  function appendTemplate(text: string) {
+    setDraftNotes((prev) => (prev.trim() ? `${prev.trim()}\n${text}` : text));
+  }
+
   async function saveEdit(id: string) {
     const { error } = await supabase
       .from("garden_plants")
@@ -81,6 +96,41 @@ function Garden() {
     toast.success("Saved");
   }
 
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = plants;
+    if (q) {
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          (p.species ?? "").toLowerCase().includes(q) ||
+          (p.notes ?? "").toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...list];
+    sorted.sort((a, b) => {
+      switch (sort) {
+        case "oldest":
+          return a.created_at.localeCompare(b.created_at);
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+        case "newest":
+        default:
+          return b.created_at.localeCompare(a.created_at);
+      }
+    });
+    return sorted;
+  }, [plants, query, sort]);
+
+  const sortOptions: { key: SortKey; label: string }[] = [
+    { key: "newest", label: "Newest" },
+    { key: "oldest", label: "Oldest" },
+    { key: "name-asc", label: "A–Z" },
+    { key: "name-desc", label: "Z–A" },
+  ];
+
   return (
     <MobileLayout>
       <div className="px-6 pt-10">
@@ -88,6 +138,35 @@ function Garden() {
         <p className="mt-1 text-sm text-muted-foreground">
           {plants.length} plant{plants.length === 1 ? "" : "s"}
         </p>
+
+        {plants.length > 0 && (
+          <>
+            <div className="relative mt-4">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by name or notes…"
+                className="h-12 rounded-2xl border-border bg-card pl-10"
+              />
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {sortOptions.map((o) => (
+                <button
+                  key={o.key}
+                  onClick={() => setSort(o.key)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                    sort === o.key
+                      ? "bg-leaf text-leaf-foreground"
+                      : "bg-card text-muted-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
 
         {loading ? (
           <div className="py-12 text-center text-muted-foreground">Loading…</div>
@@ -103,9 +182,13 @@ function Garden() {
               </Button>
             </Link>
           </div>
+        ) : visible.length === 0 ? (
+          <div className="py-12 text-center text-sm text-muted-foreground">
+            No plants match “{query}”.
+          </div>
         ) : (
           <div className="mt-6 space-y-3">
-            {plants.map((p) => {
+            {visible.map((p) => {
               const isEditing = editingId === p.id;
               return (
                 <div key={p.id} className="rounded-2xl bg-card p-3 shadow-soft">
@@ -133,9 +216,28 @@ function Garden() {
                             value={draftNotes}
                             onChange={(e) => setDraftNotes(e.target.value)}
                             placeholder="Notes (e.g. last watered, issues…)"
-                            rows={2}
+                            rows={3}
                             className="text-sm"
                           />
+                          <div className="flex flex-wrap gap-1.5">
+                            <span className="self-center text-[10px] uppercase tracking-wider text-muted-foreground">
+                              Quick add:
+                            </span>
+                            {NOTE_TEMPLATES.map((t) => {
+                              const Icon = t.icon;
+                              return (
+                                <button
+                                  key={t.label}
+                                  type="button"
+                                  onClick={() => appendTemplate(t.text())}
+                                  className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-foreground hover:bg-leaf hover:text-leaf-foreground"
+                                >
+                                  <Icon className="h-3 w-3" />
+                                  {t.label}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                       ) : (
                         <>
@@ -144,7 +246,9 @@ function Garden() {
                             <div className="truncate text-xs text-muted-foreground">{p.species}</div>
                           )}
                           {p.notes && (
-                            <div className="mt-1 text-xs text-muted-foreground">{p.notes}</div>
+                            <div className="mt-1 whitespace-pre-line text-xs text-muted-foreground">
+                              {p.notes}
+                            </div>
                           )}
                         </>
                       )}
