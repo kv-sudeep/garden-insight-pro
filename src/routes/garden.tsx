@@ -369,15 +369,24 @@ function Garden() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {categories.map((c) => (
                   <button
-                    key={c}
-                    onClick={() => setActiveCat(c)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                      activeCat === c
+                    key={c.name}
+                    onClick={() => setActiveCat(c.name)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                      activeCat === c.name
                         ? "bg-leaf text-leaf-foreground"
                         : "bg-card text-muted-foreground hover:bg-secondary"
                     }`}
                   >
-                    {c}
+                    {c.name}
+                    <span
+                      className={`rounded-full px-1.5 text-[10px] ${
+                        activeCat === c.name
+                          ? "bg-leaf-foreground/20 text-leaf-foreground"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      {c.count}
+                    </span>
                   </button>
                 ))}
               </div>
