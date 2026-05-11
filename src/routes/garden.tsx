@@ -172,12 +172,36 @@ function Garden() {
 
   async function bulkDelete() {
     if (selected.size === 0) return;
-    if (!confirm(`Remove ${selected.size} plant${selected.size === 1 ? "" : "s"}?`)) return;
     const ids = Array.from(selected);
+    const removed = plants.filter((p) => selected.has(p.id));
     const { error } = await supabase.from("garden_plants").delete().in("id", ids);
     if (error) return toast.error(error.message);
     setPlants((p) => p.filter((x) => !selected.has(x.id)));
     setSelected(new Set());
+    toast(`Removed ${removed.length} plant${removed.length === 1 ? "" : "s"}`, {
+      duration: 6000,
+      action: {
+        label: "Undo",
+        onClick: async () => {
+          const rows = removed.map((r) => ({
+            id: r.id,
+            name: r.name,
+            species: r.species,
+            image_url: r.image_url,
+            notes: r.notes,
+            category: r.category,
+            created_at: r.created_at,
+            device_id: getDeviceId(),
+          }));
+          const { error: insErr } = await supabase.from("garden_plants").insert(rows);
+          if (insErr) return toast.error(insErr.message);
+          setPlants((ps) =>
+            [...removed, ...ps].sort((a, b) => b.created_at.localeCompare(a.created_at))
+          );
+          toast.success("Restored");
+        },
+      },
+    });
     setSelecting(false);
     toast.success("Removed");
   }
@@ -204,9 +228,14 @@ function Garden() {
   }
 
   const categories = useMemo(() => {
-    const set = new Set<string>();
-    plants.forEach((p) => p.category && set.add(p.category));
-    return ["All", ...Array.from(set).sort()];
+    const counts = new Map<string, number>();
+    plants.forEach((p) => {
+      if (p.category) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+    });
+    const cats = Array.from(counts.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([name, count]) => ({ name, count }));
+    return [{ name: "All", count: plants.length }, ...cats];
   }, [plants]);
 
   const visible = useMemo(() => {
@@ -340,15 +369,24 @@ function Garden() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {categories.map((c) => (
                   <button
-                    key={c}
-                    onClick={() => setActiveCat(c)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                      activeCat === c
+                    key={c.name}
+                    onClick={() => setActiveCat(c.name)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                      activeCat === c.name
                         ? "bg-leaf text-leaf-foreground"
                         : "bg-card text-muted-foreground hover:bg-secondary"
                     }`}
                   >
-                    {c}
+                    {c.name}
+                    <span
+                      className={`rounded-full px-1.5 text-[10px] ${
+                        activeCat === c.name
+                          ? "bg-leaf-foreground/20 text-leaf-foreground"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      {c.count}
+                    </span>
                   </button>
                 ))}
               </div>
