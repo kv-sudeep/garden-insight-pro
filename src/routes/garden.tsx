@@ -228,9 +228,14 @@ function Garden() {
   }
 
   const categories = useMemo(() => {
-    const set = new Set<string>();
-    plants.forEach((p) => p.category && set.add(p.category));
-    return ["All", ...Array.from(set).sort()];
+    const counts = new Map<string, number>();
+    plants.forEach((p) => {
+      if (p.category) counts.set(p.category, (counts.get(p.category) ?? 0) + 1);
+    });
+    const cats = Array.from(counts.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([name, count]) => ({ name, count }));
+    return [{ name: "All", count: plants.length }, ...cats];
   }, [plants]);
 
   const visible = useMemo(() => {
