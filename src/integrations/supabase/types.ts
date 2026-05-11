@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       garden_plants: {
         Row: {
+          category: string | null
           created_at: string
           device_id: string
           id: string
@@ -26,6 +27,7 @@ export type Database = {
           species: string | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           device_id: string
           id?: string
@@ -36,6 +38,7 @@ export type Database = {
           species?: string | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           device_id?: string
           id?: string
