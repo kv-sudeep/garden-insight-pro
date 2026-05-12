@@ -1,20 +1,20 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  AlertTriangle,
-  Sprout,
-  ShoppingBag,
-  Beaker,
-  Leaf,
-  Shield,
-} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, CheckCircle2, AlertTriangle } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
+import { Photo3DPreview } from "@/components/Photo3DPreview";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
 import { toast } from "sonner";
+import iconBeaker from "@/assets/icon-beaker.png";
+import iconDroplet from "@/assets/icon-droplet.png";
+import iconChart from "@/assets/icon-chart.png";
+import iconBag from "@/assets/icon-bag.png";
+import iconLeaf from "@/assets/icon-leaf.png";
+import iconShield from "@/assets/icon-shield.png";
+import iconGarden from "@/assets/icon-garden.png";
+import iconSymptoms from "@/assets/icon-symptoms.png";
 
 export const Route = createFileRoute("/scan/$scanId")({
   component: ScanDetail,
@@ -60,6 +60,16 @@ type Scan = {
   created_at: string;
 };
 
+function splitSteps(text: string | null | undefined): string[] {
+  if (!text) return [];
+  // Split on numbered lists, bullets, or sentences
+  const parts = text
+    .split(/(?:\n+|(?:^|\s)\d+[.)]\s+|\s*[-•]\s+|(?<=[.!?])\s+(?=[A-Z]))/g)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 3);
+  return parts.slice(0, 6);
+}
+
 function ScanDetail() {
   const { scanId } = Route.useParams();
   const [scan, setScan] = useState<Scan | null>(null);
@@ -76,6 +86,40 @@ function ScanDetail() {
         setLoading(false);
       });
   }, [scanId]);
+
+  const treatmentSteps = useMemo(() => splitSteps(scan?.treatment), [scan?.treatment]);
+  const organicSteps = useMemo(() => splitSteps(scan?.organic_treatment), [scan?.organic_treatment]);
+  const preventionSteps = useMemo(() => splitSteps(scan?.prevention), [scan?.prevention]);
+
+  const nextActions = useMemo(() => {
+    if (!scan) return [] as { icon: string; title: string; detail: string }[];
+    if (scan.is_healthy) {
+      return [
+        { icon: iconDroplet, title: "Keep watering", detail: "Maintain your current schedule." },
+        { icon: iconChart, title: "Track weekly", detail: "Re-scan in 7 days to monitor health." },
+        { icon: iconShield, title: "Prevent issues", detail: "Inspect leaves for early signs." },
+      ];
+    }
+    const sev = scan.severity ?? "mild";
+    const urgency = sev === "severe" ? "today" : sev === "moderate" ? "within 2 days" : "this week";
+    return [
+      {
+        icon: iconBeaker,
+        title: `Start treatment ${urgency}`,
+        detail: treatmentSteps[0] ?? "Apply recommended treatment.",
+      },
+      {
+        icon: iconDroplet,
+        title: "Adjust watering",
+        detail: "Avoid wet leaves; water at the base only.",
+      },
+      {
+        icon: iconChart,
+        title: "Re-scan in 5 days",
+        detail: "Track recovery and update treatment if needed.",
+      },
+    ];
+  }, [scan, treatmentSteps]);
 
   async function addToGarden() {
     if (!scan) return;
@@ -121,30 +165,25 @@ function ScanDetail() {
   return (
     <MobileLayout>
       <div className="relative">
-        <img
-          src={scan.image_url}
-          alt={scan.plant_name ?? "Scan"}
-          className="h-72 w-full object-cover"
-        />
+        <Photo3DPreview src={scan.image_url} alt={scan.plant_name ?? "Plant"} />
         <Link
           to="/scan"
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-foreground shadow-soft backdrop-blur"
+          className="absolute left-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-foreground shadow-soft backdrop-blur"
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5 text-white">
-          <div className="text-xs uppercase tracking-wider opacity-80">
-            {scan.plant_name ?? "Plant"}
-          </div>
-          <div className="mt-1 text-2xl font-bold">
-            {healthy ? "Healthy plant" : (scan.disease_name ?? "Issue detected")}
-          </div>
-        </div>
       </div>
 
       <div className="px-6 pt-6">
+        <div className="text-xs uppercase tracking-wider text-muted-foreground">
+          {scan.plant_name ?? "Plant"}
+        </div>
+        <h1 className="mt-1 text-2xl font-bold">
+          {healthy ? "Healthy plant" : (scan.disease_name ?? "Issue detected")}
+        </h1>
+
         <div
-          className={`flex items-center gap-3 rounded-2xl p-4 ${
+          className={`mt-4 flex items-center gap-3 rounded-2xl p-4 ${
             healthy ? "bg-success/10" : "bg-danger/10"
           }`}
         >
@@ -166,33 +205,60 @@ function ScanDetail() {
           </div>
         </div>
 
+        {/* Next actions */}
+        <div className="mt-6">
+          <h3 className="mb-3 text-sm font-semibold">Next actions</h3>
+          <div className="grid gap-2">
+            {nextActions.map((a) => (
+              <div
+                key={a.title}
+                className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-soft"
+              >
+                <img
+                  src={a.icon}
+                  alt=""
+                  loading="lazy"
+                  className="h-12 w-12 shrink-0 object-contain drop-shadow-md"
+                />
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold">{a.title}</div>
+                  <div className="truncate text-xs text-muted-foreground">{a.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {scan.symptoms && (
-          <Section icon={Leaf} title="Symptoms" body={scan.symptoms} />
-        )}
-        {scan.treatment && (
-          <Section icon={Beaker} title="Treatment" body={scan.treatment} />
-        )}
-        {scan.organic_treatment && (
-          <Section icon={Sprout} title="Organic remedy" body={scan.organic_treatment} />
-        )}
-        {scan.prevention && (
-          <Section icon={Shield} title="Prevention" body={scan.prevention} />
+          <Section icon={iconSymptoms} title="Symptoms" body={scan.symptoms} />
         )}
 
-        <div className="mt-6 grid gap-3">
+        {treatmentSteps.length > 0 && (
+          <StepSection icon={iconBeaker} title="Treatment steps" steps={treatmentSteps} />
+        )}
+        {organicSteps.length > 0 && (
+          <StepSection icon={iconLeaf} title="Organic remedy" steps={organicSteps} />
+        )}
+        {preventionSteps.length > 0 && (
+          <StepSection icon={iconShield} title="Prevention" steps={preventionSteps} />
+        )}
+
+        <div className="mt-6 grid gap-3 pb-6">
           {shopUrl && (
             <a href={shopUrl} target="_blank" rel="noopener noreferrer">
-              <Button className="h-12 w-full rounded-2xl bg-leaf text-leaf-foreground hover:bg-leaf/90">
-                <ShoppingBag className="mr-2 h-5 w-5" /> Shop treatment
+              <Button className="h-14 w-full rounded-2xl bg-leaf text-leaf-foreground hover:bg-leaf/90">
+                <img src={iconBag} alt="" className="mr-2 h-7 w-7 object-contain drop-shadow" />
+                Shop treatment
               </Button>
             </a>
           )}
           <Button
             variant="outline"
-            className="h-12 w-full rounded-2xl"
+            className="h-14 w-full rounded-2xl"
             onClick={addToGarden}
           >
-            <Sprout className="mr-2 h-5 w-5" /> Add to my garden
+            <img src={iconGarden} alt="" className="mr-2 h-7 w-7 object-contain drop-shadow" />
+            Add to my garden
           </Button>
         </div>
       </div>
@@ -200,24 +266,37 @@ function ScanDetail() {
   );
 }
 
-function Section({
-  icon: Icon,
-  title,
-  body,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  body: string;
-}) {
+function Section({ icon, title, body }: { icon: string; title: string; body: string }) {
   return (
     <div className="mt-5">
       <div className="mb-2 flex items-center gap-2">
-        <Icon className="h-4 w-4 text-leaf" />
+        <img src={icon} alt="" loading="lazy" className="h-7 w-7 object-contain drop-shadow" />
         <h3 className="text-sm font-semibold">{title}</h3>
       </div>
       <p className="rounded-2xl bg-card p-4 text-sm leading-relaxed text-card-foreground shadow-soft">
         {body}
       </p>
+    </div>
+  );
+}
+
+function StepSection({ icon, title, steps }: { icon: string; title: string; steps: string[] }) {
+  return (
+    <div className="mt-5">
+      <div className="mb-2 flex items-center gap-2">
+        <img src={icon} alt="" loading="lazy" className="h-7 w-7 object-contain drop-shadow" />
+        <h3 className="text-sm font-semibold">{title}</h3>
+      </div>
+      <ol className="space-y-2 rounded-2xl bg-card p-4 shadow-soft">
+        {steps.map((s, i) => (
+          <li key={i} className="flex gap-3 text-sm leading-relaxed text-card-foreground">
+            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-leaf/15 text-xs font-bold text-leaf">
+              {i + 1}
+            </span>
+            <span>{s}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
