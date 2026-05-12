@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Camera, Leaf, ShieldCheck, Sparkles } from "lucide-react";
+import { Camera, Sparkles } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
 import heroLeaves from "@/assets/hero-leaves.jpg";
+import iconLeaf from "@/assets/icon-leaf.png";
+import iconShield from "@/assets/icon-shield.png";
+import iconSparkle from "@/assets/icon-sparkle.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,9 +74,9 @@ function Index() {
       </header>
 
       <section className="grid grid-cols-3 gap-3 px-6 py-6">
-        <FeatureChip icon={Leaf} label="100+ plants" />
-        <FeatureChip icon={ShieldCheck} label="Treatment plans" />
-        <FeatureChip icon={Sparkles} label="Instant AI" />
+        <FeatureChip icon={iconLeaf} label="100+ plants" />
+        <FeatureChip icon={iconShield} label="Treatment plans" />
+        <FeatureChip icon={iconSparkle} label="Instant AI" />
       </section>
 
       <section className="px-6">
@@ -125,16 +128,17 @@ function Index() {
   );
 }
 
-function FeatureChip({
-  icon: Icon,
-  label,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}) {
+function FeatureChip({ icon, label }: { icon: string; label: string }) {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-2xl bg-secondary p-3 text-center">
-      <Icon className="h-5 w-5 text-leaf" />
+    <div className="flex flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-secondary to-secondary/40 p-3 text-center shadow-soft transition-transform hover:-translate-y-1 hover:scale-105">
+      <img
+        src={icon}
+        alt=""
+        width={48}
+        height={48}
+        loading="lazy"
+        className="h-12 w-12 object-contain drop-shadow-lg"
+      />
       <span className="text-xs font-medium text-secondary-foreground">{label}</span>
     </div>
   );
