@@ -1,12 +1,15 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Camera, Sprout, BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
+import iconHome from "@/assets/icon-home.png";
+import iconCamera from "@/assets/icon-camera.png";
+import iconGarden from "@/assets/icon-garden.png";
+import iconLibrary from "@/assets/icon-library.png";
 
 const tabs = [
-  { to: "/", label: "Home", icon: Home },
-  { to: "/scan", label: "Scan", icon: Camera },
-  { to: "/garden", label: "Garden", icon: Sprout },
-  { to: "/library", label: "Library", icon: BookOpen },
+  { to: "/", label: "Home", icon: iconHome },
+  { to: "/scan", label: "Scan", icon: iconCamera },
+  { to: "/garden", label: "Garden", icon: iconGarden },
+  { to: "/library", label: "Library", icon: iconLibrary },
 ] as const;
 
 export function MobileLayout({ children }: { children: ReactNode }) {
@@ -16,17 +19,25 @@ export function MobileLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 pb-24">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-md items-center justify-around px-2 py-2">
-          {tabs.map(({ to, label, icon: Icon }) => {
+          {tabs.map(({ to, label, icon }) => {
             const active = pathname === to || (to !== "/" && pathname.startsWith(to));
             return (
               <Link
                 key={to}
                 to={to}
-                className={`flex flex-1 flex-col items-center gap-1 rounded-xl py-2 text-xs font-medium transition-colors ${
+                className={`flex flex-1 flex-col items-center gap-1 rounded-xl py-2 text-xs font-medium transition-all ${
                   active ? "text-leaf" : "text-muted-foreground"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${active ? "scale-110" : ""} transition-transform`} />
+                <img
+                  src={icon}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className={`h-9 w-9 object-contain drop-shadow-md transition-transform ${
+                    active ? "scale-110 -translate-y-0.5" : "opacity-80"
+                  }`}
+                />
                 {label}
               </Link>
             );
