@@ -21,9 +21,16 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { image_url } = await req.json();
-    if (!image_url) {
-      return new Response(JSON.stringify({ error: "image_url required" }), {
+    const body = await req.json();
+    const images: { label?: string; url: string }[] = Array.isArray(body.images)
+      ? body.images.filter((i: { url?: string }) => typeof i?.url === "string")
+      : body.image_url
+        ? [{ label: "photo", url: body.image_url }]
+        : [];
+    const notes: string = typeof body.notes === "string" ? body.notes.trim() : "";
+
+    if (images.length === 0) {
+      return new Response(JSON.stringify({ error: "at least one image required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -31,6 +38,28 @@ Deno.serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not set");
+
+    const userContent: unknown[] = [
+      {
+        type: "text",
+        text:
+          images.length > 1
+            ? `Diagnose this plant. ${images.length} photos of the SAME plant are attached from different angles (${images
+                .map((i) => i.label ?? "photo")
+                .join(", ")}). Combine all of them into one diagnosis.`
+            : "Diagnose this plant.",
+      },
+    ];
+    for (const img of images) {
+      if (images.length > 1) userContent.push({ type: "text", text: `Angle: ${img.label ?? "photo"}` });
+      userContent.push({ type: "image_url", image_url: { url: img.url } });
+    }
+    if (notes) {
+      userContent.push({
+        type: "text",
+        text: `Additional observations reported by the grower (use these as supporting evidence):\n${notes}`,
+      });
+    }
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -42,14 +71,9 @@ Deno.serve(async (req) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Diagnose this plant." },
-              { type: "image_url", image_url: { url: image_url } },
-            ],
-          },
+          { role: "user", content: userContent },
         ],
+
         tools: [
           {
             type: "function",

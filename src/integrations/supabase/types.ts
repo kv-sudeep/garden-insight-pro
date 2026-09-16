@@ -107,7 +107,9 @@ export type Database = {
           device_id: string
           disease_name: string | null
           id: string
+          image_hash: string | null
           image_url: string
+          images: Json
           is_healthy: boolean | null
           organic_treatment: string | null
           plant_name: string | null
@@ -117,6 +119,7 @@ export type Database = {
           shop_query: string | null
           symptoms: string | null
           treatment: string | null
+          user_notes: string | null
         }
         Insert: {
           confidence?: number | null
@@ -124,7 +127,9 @@ export type Database = {
           device_id: string
           disease_name?: string | null
           id?: string
+          image_hash?: string | null
           image_url: string
+          images?: Json
           is_healthy?: boolean | null
           organic_treatment?: string | null
           plant_name?: string | null
@@ -134,6 +139,7 @@ export type Database = {
           shop_query?: string | null
           symptoms?: string | null
           treatment?: string | null
+          user_notes?: string | null
         }
         Update: {
           confidence?: number | null
@@ -141,7 +147,9 @@ export type Database = {
           device_id?: string
           disease_name?: string | null
           id?: string
+          image_hash?: string | null
           image_url?: string
+          images?: Json
           is_healthy?: boolean | null
           organic_treatment?: string | null
           plant_name?: string | null
@@ -151,6 +159,7 @@ export type Database = {
           shop_query?: string | null
           symptoms?: string | null
           treatment?: string | null
+          user_notes?: string | null
         }
         Relationships: []
       }
