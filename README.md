@@ -6,7 +6,12 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 
 ### 📸 Scan & AI Diagnosis
 - **Scan page (`/scan`)** — take a photo with the camera or upload one from the gallery.
-- Photo uploads to cloud storage, then the `diagnose-plant` AI function (Gemini vision via Lovable AI) analyzes it.
+- **Multi-angle capture** — three slots (whole plant, leaf underside, close-up); one photo is enough, but all three are combined into a single, more reliable diagnosis.
+- **Photo quality check** — every photo is scored for lighting and blur before sending, with a badge, a tip on how to improve it, and a confirmation prompt if you submit a poor photo.
+- **Voice symptom notes** — record a spoken description; it is transcribed automatically and can be edited before sending.
+- **"Not sure what's wrong?"** — three quick questions (worst affected part, when it started, recent care change) added to the diagnosis as supporting evidence.
+- **Repeat scan detection** — the same photo scanned twice offers the earlier result instead of re-diagnosing.
+- Photos upload to cloud storage, then the `diagnose-plant` AI function (Gemini vision via Lovable AI) analyzes them together with your notes.
 - Progress feedback at each step: *Uploading → Diagnosing → Saving*.
 - AI returns: plant name, health status, disease name, severity (mild/moderate/severe), confidence %, symptoms, treatment, organic treatment, prevention tips, and a product shop query.
 
