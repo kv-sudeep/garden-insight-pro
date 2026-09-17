@@ -8,6 +8,13 @@
       "when": 1789545403989,
       "tag": "0000_scan_multi_angle_notes",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789618710011,
+      "tag": "0001_garden_plant_basics",
+      "breakpoints": true
     }
   ]
 }

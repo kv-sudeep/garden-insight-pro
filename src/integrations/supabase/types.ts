@@ -16,37 +16,49 @@ export type Database = {
     Tables: {
       garden_plants: {
         Row: {
+          archived_at: string | null
           category: string | null
           created_at: string
           device_id: string
           id: string
           image_url: string | null
           last_scan_id: string | null
+          location: string | null
           name: string
+          nickname: string | null
           notes: string | null
           species: string | null
+          tags: string[]
         }
         Insert: {
+          archived_at?: string | null
           category?: string | null
           created_at?: string
           device_id: string
           id?: string
           image_url?: string | null
           last_scan_id?: string | null
+          location?: string | null
           name: string
+          nickname?: string | null
           notes?: string | null
           species?: string | null
+          tags?: string[]
         }
         Update: {
+          archived_at?: string | null
           category?: string | null
           created_at?: string
           device_id?: string
           id?: string
           image_url?: string | null
           last_scan_id?: string | null
+          location?: string | null
           name?: string
+          nickname?: string | null
           notes?: string | null
           species?: string | null
+          tags?: string[]
         }
         Relationships: [
           {
