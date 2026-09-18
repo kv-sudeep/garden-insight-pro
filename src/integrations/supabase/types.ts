@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      diseases: {
+        Row: {
+          affects: string | null
+          causes: string | null
+          created_at: string
+          id: string
+          kind: string
+          name: string
+          organic_treatment: string | null
+          pathogen: string | null
+          prevention: string | null
+          severity: string | null
+          slug: string
+          summary: string | null
+          symptoms: string | null
+          treatment: string | null
+        }
+        Insert: {
+          affects?: string | null
+          causes?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          name: string
+          organic_treatment?: string | null
+          pathogen?: string | null
+          prevention?: string | null
+          severity?: string | null
+          slug: string
+          summary?: string | null
+          symptoms?: string | null
+          treatment?: string | null
+        }
+        Update: {
+          affects?: string | null
+          causes?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          name?: string
+          organic_treatment?: string | null
+          pathogen?: string | null
+          prevention?: string | null
+          severity?: string | null
+          slug?: string
+          summary?: string | null
+          symptoms?: string | null
+          treatment?: string | null
+        }
+        Relationships: []
+      }
       garden_plants: {
         Row: {
           archived_at: string | null
@@ -70,44 +121,203 @@ export type Database = {
           },
         ]
       }
-      plant_library: {
+      identifications: {
         Row: {
-          category: string | null
-          common_diseases: string | null
+          also_known_as: string | null
+          care_calendar: string | null
+          common_mistakes: string | null
+          common_name: string | null
+          companion_plants: string | null
+          confidence: number | null
           created_at: string
-          description: string | null
+          device_id: string
+          edible_parts: string | null
+          family: string | null
           id: string
-          image_url: string | null
-          name: string
+          image_url: string
+          images: Json
+          invasive_notes: string | null
+          native_range: string | null
+          raw: Json | null
           scientific_name: string | null
+          similar_plants: string | null
           soil: string | null
+          soil_ph: string | null
+          summary: string | null
           sunlight: string | null
+          toxicity: string | null
           water: string | null
         }
         Insert: {
-          category?: string | null
-          common_diseases?: string | null
+          also_known_as?: string | null
+          care_calendar?: string | null
+          common_mistakes?: string | null
+          common_name?: string | null
+          companion_plants?: string | null
+          confidence?: number | null
           created_at?: string
-          description?: string | null
+          device_id: string
+          edible_parts?: string | null
+          family?: string | null
           id?: string
-          image_url?: string | null
-          name: string
+          image_url: string
+          images?: Json
+          invasive_notes?: string | null
+          native_range?: string | null
+          raw?: Json | null
           scientific_name?: string | null
+          similar_plants?: string | null
           soil?: string | null
+          soil_ph?: string | null
+          summary?: string | null
           sunlight?: string | null
+          toxicity?: string | null
           water?: string | null
         }
         Update: {
+          also_known_as?: string | null
+          care_calendar?: string | null
+          common_mistakes?: string | null
+          common_name?: string | null
+          companion_plants?: string | null
+          confidence?: number | null
+          created_at?: string
+          device_id?: string
+          edible_parts?: string | null
+          family?: string | null
+          id?: string
+          image_url?: string
+          images?: Json
+          invasive_notes?: string | null
+          native_range?: string | null
+          raw?: Json | null
+          scientific_name?: string | null
+          similar_plants?: string | null
+          soil?: string | null
+          soil_ph?: string | null
+          summary?: string | null
+          sunlight?: string | null
+          toxicity?: string | null
+          water?: string | null
+        }
+        Relationships: []
+      }
+      pests: {
+        Row: {
+          affects: string | null
+          created_at: string
+          damage: string | null
+          id: string
+          identify: string | null
+          lifecycle: string | null
+          name: string
+          organic_treatment: string | null
+          prevention: string | null
+          scientific_name: string | null
+          slug: string
+          summary: string | null
+          treatment: string | null
+        }
+        Insert: {
+          affects?: string | null
+          created_at?: string
+          damage?: string | null
+          id?: string
+          identify?: string | null
+          lifecycle?: string | null
+          name: string
+          organic_treatment?: string | null
+          prevention?: string | null
+          scientific_name?: string | null
+          slug: string
+          summary?: string | null
+          treatment?: string | null
+        }
+        Update: {
+          affects?: string | null
+          created_at?: string
+          damage?: string | null
+          id?: string
+          identify?: string | null
+          lifecycle?: string | null
+          name?: string
+          organic_treatment?: string | null
+          prevention?: string | null
+          scientific_name?: string | null
+          slug?: string
+          summary?: string | null
+          treatment?: string | null
+        }
+        Relationships: []
+      }
+      plant_library: {
+        Row: {
+          avoid_near: string | null
+          category: string | null
+          common_diseases: string | null
+          common_mistakes: string | null
+          companion_plants: string | null
+          created_at: string
+          description: string | null
+          edible_parts: string | null
+          id: string
+          image_url: string | null
+          invasive_notes: string | null
+          name: string
+          native_range: string | null
+          pronunciation: string | null
+          scientific_name: string | null
+          similar_plants: string | null
+          soil: string | null
+          soil_ph: string | null
+          sunlight: string | null
+          toxicity: string | null
+          water: string | null
+        }
+        Insert: {
+          avoid_near?: string | null
           category?: string | null
           common_diseases?: string | null
+          common_mistakes?: string | null
+          companion_plants?: string | null
           created_at?: string
           description?: string | null
+          edible_parts?: string | null
           id?: string
           image_url?: string | null
-          name?: string
+          invasive_notes?: string | null
+          name: string
+          native_range?: string | null
+          pronunciation?: string | null
           scientific_name?: string | null
+          similar_plants?: string | null
           soil?: string | null
+          soil_ph?: string | null
           sunlight?: string | null
+          toxicity?: string | null
+          water?: string | null
+        }
+        Update: {
+          avoid_near?: string | null
+          category?: string | null
+          common_diseases?: string | null
+          common_mistakes?: string | null
+          companion_plants?: string | null
+          created_at?: string
+          description?: string | null
+          edible_parts?: string | null
+          id?: string
+          image_url?: string | null
+          invasive_notes?: string | null
+          name?: string
+          native_range?: string | null
+          pronunciation?: string | null
+          scientific_name?: string | null
+          similar_plants?: string | null
+          soil?: string | null
+          soil_ph?: string | null
+          sunlight?: string | null
+          toxicity?: string | null
           water?: string | null
         }
         Relationships: []
