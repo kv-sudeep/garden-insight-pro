@@ -23,15 +23,20 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 - **3D action buttons** — buy treatment online (shop link) and **Save to My Garden**.
 
 ### 🪴 My Garden (`/garden`)
-- All saved plants with photo, health status, and notes.
-- **Search bar** — find plants by name or notes.
-- **Sort options** — newest first, name A–Z.
+- All saved plants with photo, health status, notes, nickname, spot and labels.
+- **Add a plant by hand** — name, nickname, species, category, location and labels without scanning, with duplicate-name warning.
+- **Nicknames** shown as the headline, real name underneath.
+- **Labels/tags** (indoor, outdoor, gift, for-sale…) with filter chips.
+- **Location tagging** (kitchen window, balcony, backyard bed…) with quick suggestions.
+- **Archive instead of delete** — Growing / Archived tabs, per-plant archive & restore with undo.
+- **Search bar** — matches name, nickname, species, spot, labels or notes.
+- **Sort options** — newest, oldest, name A–Z, Z–A.
 - **Category filter chips** with live match counts.
-- **Bulk selection** — select multiple plants for bulk delete or bulk logging; **Undo snackbar (6s)** restores accidentally deleted plants.
+- **Bulk selection** — bulk archive, restore, delete or care logging; **Undo snackbar (6s)** restores removed plants.
 - **One-tap quick actions** on each card — log *Watered / Repotted / Fertilized* instantly.
 - **Edit mode with note templates** — quick-add common action notes while editing.
 - **Care reminders panel** — upcoming tasks computed from your note history.
-- Edit notes and delete plants anytime.
+
 
 ### 📚 Plant Library (`/library`)
 - Browse care info for 100+ plants — seeded starter set across **Vegetables, Herbs, Houseplants, Flowers, Fruits**.
