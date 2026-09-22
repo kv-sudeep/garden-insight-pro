@@ -345,7 +345,11 @@ function Garden() {
       action: {
         label: "Undo",
         onClick: async () => {
-          const rows = removed.map((r) => ({ ...r, device_id: getDeviceId() }));
+          const rows = removed.map((r) => ({
+            ...r,
+            tags: r.tags ?? [],
+            device_id: getDeviceId(),
+          }));
           const { error: insErr } = await supabase.from("garden_plants").insert(rows);
           if (insErr) return toast.error(insErr.message);
           setPlants((ps) =>
