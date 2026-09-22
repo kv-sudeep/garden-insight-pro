@@ -17,6 +17,7 @@ import { Route as GardenRouteImport } from './routes/garden'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScanIndexRouteImport } from './routes/scan.index'
 import { Route as LibraryIndexRouteImport } from './routes/library.index'
+import { Route as IdentifyIndexRouteImport } from './routes/identify.index'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as ScanScanIdRouteImport } from './routes/scan.$scanId'
 import { Route as LibraryPlantIdRouteImport } from './routes/library.$plantId'
@@ -65,6 +66,11 @@ const LibraryIndexRoute = LibraryIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LibraryRoute,
 } as any)
+const IdentifyIndexRoute = IdentifyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => IdentifyRoute,
+} as any)
 const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -105,7 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/garden': typeof GardenRoute
   '/guides': typeof GuidesRouteWithChildren
-  '/identify': typeof IdentifyRoute
+  '/identify': typeof IdentifyRouteWithChildren
   '/library': typeof LibraryRouteWithChildren
   '/scan': typeof ScanRouteWithChildren
   '/api/identify': typeof ApiIdentifyRoute
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
   '/guides/': typeof GuidesIndexRoute
+  '/identify/': typeof IdentifyIndexRoute
   '/library/': typeof LibraryIndexRoute
   '/scan/': typeof ScanIndexRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
@@ -121,12 +128,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/garden': typeof GardenRoute
-  '/identify': typeof IdentifyRoute
   '/api/identify': typeof ApiIdentifyRoute
   '/api/transcribe': typeof ApiTranscribeRoute
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
   '/guides': typeof GuidesIndexRoute
+  '/identify': typeof IdentifyIndexRoute
   '/library': typeof LibraryIndexRoute
   '/scan': typeof ScanIndexRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
@@ -137,7 +144,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/garden': typeof GardenRoute
   '/guides': typeof GuidesRouteWithChildren
-  '/identify': typeof IdentifyRoute
+  '/identify': typeof IdentifyRouteWithChildren
   '/library': typeof LibraryRouteWithChildren
   '/scan': typeof ScanRouteWithChildren
   '/api/identify': typeof ApiIdentifyRoute
@@ -145,6 +152,7 @@ export interface FileRoutesById {
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
   '/guides/': typeof GuidesIndexRoute
+  '/identify/': typeof IdentifyIndexRoute
   '/library/': typeof LibraryIndexRoute
   '/scan/': typeof ScanIndexRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
@@ -164,6 +172,7 @@ export interface FileRouteTypes {
     | '/library/$plantId'
     | '/scan/$scanId'
     | '/guides/'
+    | '/identify/'
     | '/library/'
     | '/scan/'
     | '/guides/disease/$slug'
@@ -172,12 +181,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/garden'
-    | '/identify'
     | '/api/identify'
     | '/api/transcribe'
     | '/library/$plantId'
     | '/scan/$scanId'
     | '/guides'
+    | '/identify'
     | '/library'
     | '/scan'
     | '/guides/disease/$slug'
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/library/$plantId'
     | '/scan/$scanId'
     | '/guides/'
+    | '/identify/'
     | '/library/'
     | '/scan/'
     | '/guides/disease/$slug'
@@ -205,7 +215,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   GardenRoute: typeof GardenRoute
   GuidesRoute: typeof GuidesRouteWithChildren
-  IdentifyRoute: typeof IdentifyRoute
+  IdentifyRoute: typeof IdentifyRouteWithChildren
   LibraryRoute: typeof LibraryRouteWithChildren
   ScanRoute: typeof ScanRouteWithChildren
   ApiIdentifyRoute: typeof ApiIdentifyRoute
@@ -269,6 +279,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/library/'
       preLoaderRoute: typeof LibraryIndexRouteImport
       parentRoute: typeof LibraryRoute
+    }
+    '/identify/': {
+      id: '/identify/'
+      path: '/'
+      fullPath: '/identify/'
+      preLoaderRoute: typeof IdentifyIndexRouteImport
+      parentRoute: typeof IdentifyRoute
     }
     '/guides/': {
       id: '/guides/'
@@ -337,6 +354,18 @@ const GuidesRouteChildren: GuidesRouteChildren = {
 const GuidesRouteWithChildren =
   GuidesRoute._addFileChildren(GuidesRouteChildren)
 
+interface IdentifyRouteChildren {
+  IdentifyIndexRoute: typeof IdentifyIndexRoute
+}
+
+const IdentifyRouteChildren: IdentifyRouteChildren = {
+  IdentifyIndexRoute: IdentifyIndexRoute,
+}
+
+const IdentifyRouteWithChildren = IdentifyRoute._addFileChildren(
+  IdentifyRouteChildren,
+)
+
 interface LibraryRouteChildren {
   LibraryPlantIdRoute: typeof LibraryPlantIdRoute
   LibraryIndexRoute: typeof LibraryIndexRoute
@@ -366,7 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   GardenRoute: GardenRoute,
   GuidesRoute: GuidesRouteWithChildren,
-  IdentifyRoute: IdentifyRoute,
+  IdentifyRoute: IdentifyRouteWithChildren,
   LibraryRoute: LibraryRouteWithChildren,
   ScanRoute: ScanRouteWithChildren,
   ApiIdentifyRoute: ApiIdentifyRoute,
