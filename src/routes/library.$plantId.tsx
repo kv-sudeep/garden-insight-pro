@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Droplets, Sun, Mountain, Bug } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { supabase } from "@/integrations/supabase/client";
+import { GuideSection, StepList } from "@/components/GuideSection";
 
 export const Route = createFileRoute("/library/$plantId")({
   component: PlantDetail,
@@ -23,6 +24,16 @@ type Plant = {
   sunlight: string | null;
   soil: string | null;
   common_diseases: string | null;
+  soil_ph: string | null;
+  toxicity: string | null;
+  edible_parts: string | null;
+  common_mistakes: string | null;
+  companion_plants: string | null;
+  avoid_near: string | null;
+  native_range: string | null;
+  invasive_notes: string | null;
+  similar_plants: string | null;
+  pronunciation: string | null;
 };
 
 function PlantDetail() {
@@ -41,6 +52,16 @@ function PlantDetail() {
         setLoading(false);
       });
   }, [plantId]);
+
+  function speak() {
+    if (!plant) return;
+    const text = plant.pronunciation || plant.scientific_name || plant.name;
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utter);
+  }
 
   if (loading) {
     return (
@@ -70,6 +91,14 @@ function PlantDetail() {
         {plant.scientific_name && (
           <p className="text-sm italic opacity-80">{plant.scientific_name}</p>
         )}
+        {(plant.pronunciation || plant.scientific_name) && (
+          <button
+            onClick={speak}
+            className="mt-2 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur"
+          >
+            🔊 Say it{plant.pronunciation ? ` · ${plant.pronunciation}` : ""}
+          </button>
+        )}
         {plant.description && <p className="mt-3 text-sm opacity-90">{plant.description}</p>}
       </div>
 
@@ -77,7 +106,23 @@ function PlantDetail() {
         <CareCard icon={Droplets} title="Water" body={plant.water} />
         <CareCard icon={Sun} title="Sunlight" body={plant.sunlight} />
         <CareCard icon={Mountain} title="Soil" body={plant.soil} />
+        <GuideSection title="Soil pH" body={plant.soil_ph} />
+        <GuideSection title="Toxicity (pets & kids)" body={plant.toxicity} />
+        <GuideSection title="Edible parts" body={plant.edible_parts} />
+        <StepList title="Common mistakes" body={plant.common_mistakes} />
+        <GuideSection title="Good companions" body={plant.companion_plants} />
+        <GuideSection title="Keep away from" body={plant.avoid_near} />
+        <GuideSection title="Native range" body={plant.native_range} />
+        <GuideSection title="Native or invasive" body={plant.invasive_notes} />
+        <GuideSection title="Similar plants" body={plant.similar_plants} />
         <CareCard icon={Bug} title="Common diseases" body={plant.common_diseases} />
+
+        <Link
+          to="/guides"
+          className="mb-6 mt-1 block rounded-2xl bg-card p-4 text-center text-sm font-semibold text-leaf shadow-soft"
+        >
+          Browse disease & pest guides →
+        </Link>
       </div>
     </MobileLayout>
   );

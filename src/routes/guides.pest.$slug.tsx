@@ -22,7 +22,7 @@ export const Route = createFileRoute("/guides/pest/$slug")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: PestGuide;
+  component: PestGuide,
 });
 
 type Pest = {
