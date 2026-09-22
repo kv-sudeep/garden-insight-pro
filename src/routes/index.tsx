@@ -79,6 +79,25 @@ function Index() {
         <FeatureChip icon={iconSparkle} label="Instant AI" />
       </section>
 
+      <section className="grid grid-cols-2 gap-3 px-6 pb-6">
+        <Link
+          to="/identify"
+          className="rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
+        >
+          <div className="text-sm font-semibold">Identify a plant</div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Don't know the name? Snap a photo.
+          </p>
+        </Link>
+        <Link
+          to="/guides"
+          className="rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
+        >
+          <div className="text-sm font-semibold">Disease & pest guides</div>
+          <p className="mt-1 text-xs text-muted-foreground">Browse problems without a photo.</p>
+        </Link>
+      </section>
+
       <section className="px-6">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Recent scans</h2>
