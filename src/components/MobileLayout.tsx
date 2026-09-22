@@ -4,10 +4,12 @@ import iconHome from "@/assets/icon-home.png";
 import iconCamera from "@/assets/icon-camera.png";
 import iconGarden from "@/assets/icon-garden.png";
 import iconLibrary from "@/assets/icon-library.png";
+import iconSparkle from "@/assets/icon-sparkle.png";
 
 const tabs = [
   { to: "/", label: "Home", icon: iconHome },
   { to: "/scan", label: "Scan", icon: iconCamera },
+  { to: "/identify", label: "ID", icon: iconSparkle },
   { to: "/garden", label: "Garden", icon: iconGarden },
   { to: "/library", label: "Library", icon: iconLibrary },
 ] as const;
