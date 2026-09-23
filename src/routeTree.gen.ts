@@ -13,6 +13,7 @@ import { Route as ScanRouteImport } from './routes/scan'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as IdentifyRouteImport } from './routes/identify'
 import { Route as GuidesRouteImport } from './routes/guides'
+import { Route as GardenRouteImport } from './routes/garden'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ScanIndexRouteImport } from './routes/scan.index'
 import { Route as LibraryIndexRouteImport } from './routes/library.index'
@@ -47,6 +48,11 @@ const GuidesRoute = GuidesRouteImport.update({
   path: '/guides',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GardenRoute = GardenRouteImport.update({
+  id: '/garden',
+  path: '/garden',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,9 +79,9 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
   getParentRoute: () => GuidesRoute,
 } as any)
 const GardenIndexRoute = GardenIndexRouteImport.update({
-  id: '/garden/',
-  path: '/garden/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => GardenRoute,
 } as any)
 const ScanScanIdRoute = ScanScanIdRouteImport.update({
   id: '/$scanId',
@@ -115,6 +121,7 @@ const GuidesDiseaseSlugRoute = GuidesDiseaseSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/garden': typeof GardenRouteWithChildren
   '/guides': typeof GuidesRouteWithChildren
   '/identify': typeof IdentifyRouteWithChildren
   '/library': typeof LibraryRouteWithChildren
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/garden': typeof GardenRouteWithChildren
   '/guides': typeof GuidesRouteWithChildren
   '/identify': typeof IdentifyRouteWithChildren
   '/library': typeof LibraryRouteWithChildren
@@ -171,6 +179,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/garden'
     | '/guides'
     | '/identify'
     | '/library'
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/garden'
     | '/guides'
     | '/identify'
     | '/library'
@@ -225,13 +235,13 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  GardenRoute: typeof GardenRouteWithChildren
   GuidesRoute: typeof GuidesRouteWithChildren
   IdentifyRoute: typeof IdentifyRouteWithChildren
   LibraryRoute: typeof LibraryRouteWithChildren
   ScanRoute: typeof ScanRouteWithChildren
   ApiIdentifyRoute: typeof ApiIdentifyRoute
   ApiTranscribeRoute: typeof ApiTranscribeRoute
-  GardenIndexRoute: typeof GardenIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -262,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/guides'
       fullPath: '/guides'
       preLoaderRoute: typeof GuidesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garden': {
+      id: '/garden'
+      path: '/garden'
+      fullPath: '/garden'
+      preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -301,10 +318,10 @@ declare module '@tanstack/react-router' {
     }
     '/garden/': {
       id: '/garden/'
-      path: '/garden'
+      path: '/'
       fullPath: '/garden/'
       preLoaderRoute: typeof GardenIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof GardenRoute
     }
     '/scan/$scanId': {
       id: '/scan/$scanId'
@@ -357,6 +374,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface GardenRouteChildren {
+  GardenIndexRoute: typeof GardenIndexRoute
+}
+
+const GardenRouteChildren: GardenRouteChildren = {
+  GardenIndexRoute: GardenIndexRoute,
+}
+
+const GardenRouteWithChildren =
+  GardenRoute._addFileChildren(GardenRouteChildren)
 
 interface GuidesRouteChildren {
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -414,13 +442,13 @@ const ScanRouteWithChildren = ScanRoute._addFileChildren(ScanRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  GardenRoute: GardenRouteWithChildren,
   GuidesRoute: GuidesRouteWithChildren,
   IdentifyRoute: IdentifyRouteWithChildren,
   LibraryRoute: LibraryRouteWithChildren,
   ScanRoute: ScanRouteWithChildren,
   ApiIdentifyRoute: ApiIdentifyRoute,
   ApiTranscribeRoute: ApiTranscribeRoute,
-  GardenIndexRoute: GardenIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
