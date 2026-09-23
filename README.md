@@ -38,10 +38,24 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 - **Care reminders panel** — upcoming tasks computed from your note history.
 
 
+### 🔎 Identify a Plant (`/identify`)
+- **Don't know the plant?** Add up to three photos (whole plant, leaf close-up, flower or fruit) and get an identification.
+- Same photo quality checks as scanning, plus an optional "anything you already know" note.
+- **Result page (`/identify/$idId`)** — common & scientific name, family, other names, confidence, summary, watering, light, soil, soil pH, toxicity, edible parts, native range, invasive notes, common mistakes, companion plants, lookalikes and a care calendar.
+- **Add to my garden** straight from the result.
+
+### 🐛 Disease & Pest Guides (`/guides`)
+- **30 browsable guides** — 18 plant problems (diseases, disorders and nutrient shortages) and 12 pests.
+- Search plus filter chips (All / Diseases / Disorders / Nutrients / Pests) with live counts.
+- Each guide covers what you'll see, why it happens, treatment, an organic remedy and prevention; pest guides also include how to identify it, the damage it does and its lifecycle.
+
 ### 📚 Plant Library (`/library`)
 - Browse care info for 100+ plants — seeded starter set across **Vegetables, Herbs, Houseplants, Flowers, Fruits**.
 - **Search bar** plus **category filter chips** for fast filtering.
-- **Detail pages (`/library/$plantId`)** — watering, sunlight, soil needs, and common diseases per plant.
+- **Detail pages (`/library/$plantId`)** — watering, sunlight, soil, soil pH, toxicity for pets and children, edible parts, common mistakes, companion plants, plants to avoid nearby, native vs invasive notes, lookalikes, common diseases.
+- **🔊 Say it** — hear the scientific name pronounced out loud.
+- Link through to the disease & pest guides.
+
 
 ### 🏠 Home (`/`)
 - Hero with **3D Pixar-style illustration**, animated "AI-powered" badge, and scan CTA.
@@ -51,7 +65,7 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 ### 🎬 Splash Screen & 3D Design
 - Animated **3D KrushiMitra AI** splash on first open each session — pops in, floats, fades out.
 - Whole app styled with a **3D glossy/claymation language**: layered shadows, depth slabs, rounded cards, custom 3D icon set.
-- Mobile-first layout with bottom tab navigation (Home, Scan, Garden, Library) using 3D icons.
+- Mobile-first layout with bottom tab navigation (Home, Scan, ID, Garden, Library) using 3D icons.
 
 ## 🧱 Tech Stack
 - **TanStack Start** (React 19, Vite 7, SSR) — TanStack Router for routing.
@@ -63,17 +77,22 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 ## 🗄️ Data Model
 | Table | Purpose |
 |---|---|
-| `scans` | Every diagnosis: photo URL, plant, disease, severity, confidence, treatment fields |
-| `garden_plants` | Saved plants with notes, category, care history |
-| `plant_library` | Care guide catalog (name, scientific name, category, water/sunlight/soil, common diseases) |
+| `scans` | Every diagnosis: photo URLs, notes, plant, disease, severity, confidence, treatment fields |
+| `identifications` | Plant ID results: names, family, confidence, full care & safety profile |
+| `garden_plants` | Saved plants with nickname, labels, spot, notes, category, care history, archive state |
+| `plant_library` | Care guide catalog (care, soil pH, toxicity, edible parts, companions, invasive notes, pronunciation) |
+| `diseases` | Browsable guides for diseases, disorders and nutrient shortages |
+| `pests` | Browsable pest guides (identify, damage, lifecycle, treatment, prevention) |
+
 
 Photos are stored in the `scans` storage bucket; scans are keyed by anonymous `device_id` so no sign-up is needed.
 
 ## 🔌 AI Flow
-1. Client uploads photo → gets public URL.
-2. Client calls `diagnose-plant` edge function (`supabase/functions/diagnose-plant`).
-3. Function calls Lovable AI (Gemini 2.5 Flash) with a strict structured-output schema.
-4. Result is inserted into `scans` and the app navigates to the results page.
+1. Client uploads photos → gets public URLs.
+2. Diagnosis calls `diagnose-plant`; identification calls `/api/identify`; voice notes call `/api/transcribe`.
+3. Each calls Lovable AI (Gemini 2.5 Flash vision, Gemini transcribe for audio) with a strict structured-output schema.
+4. Result is saved to `scans` / `identifications` and the app navigates to the result page.
+
 
 ## 🚀 Getting Started
 ```bash
@@ -88,7 +107,7 @@ src/
   assets/          # 3D clay icons, hero art, splash logo
   components/      # MobileLayout, Photo3DPreview, SplashScreen, UI kit
   lib/             # device id + utils
-  routes/          # /, /scan, /scan/$scanId, /garden, /library
+  routes/          # /, /scan, /identify, /garden, /library, /guides, /api/*
 supabase/
   functions/diagnose-plant/   # AI diagnosis function
   migrations/                 # schema + seed data
