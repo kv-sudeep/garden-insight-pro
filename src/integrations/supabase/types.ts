@@ -67,7 +67,9 @@ export type Database = {
       }
       garden_plants: {
         Row: {
+          acquired_on: string | null
           archived_at: string | null
+          bed: string | null
           category: string | null
           created_at: string
           device_id: string
@@ -75,14 +77,24 @@ export type Database = {
           image_url: string | null
           last_scan_id: string | null
           location: string | null
+          map_x: number | null
+          map_y: number | null
           name: string
           nickname: string | null
           notes: string | null
+          parent_plant_id: string | null
+          retired_at: string | null
+          retirement_note: string | null
+          season_end_month: number | null
+          season_start_month: number | null
+          soil_type: string | null
           species: string | null
           tags: string[]
         }
         Insert: {
+          acquired_on?: string | null
           archived_at?: string | null
+          bed?: string | null
           category?: string | null
           created_at?: string
           device_id: string
@@ -90,14 +102,24 @@ export type Database = {
           image_url?: string | null
           last_scan_id?: string | null
           location?: string | null
+          map_x?: number | null
+          map_y?: number | null
           name: string
           nickname?: string | null
           notes?: string | null
+          parent_plant_id?: string | null
+          retired_at?: string | null
+          retirement_note?: string | null
+          season_end_month?: number | null
+          season_start_month?: number | null
+          soil_type?: string | null
           species?: string | null
           tags?: string[]
         }
         Update: {
+          acquired_on?: string | null
           archived_at?: string | null
+          bed?: string | null
           category?: string | null
           created_at?: string
           device_id?: string
@@ -105,9 +127,17 @@ export type Database = {
           image_url?: string | null
           last_scan_id?: string | null
           location?: string | null
+          map_x?: number | null
+          map_y?: number | null
           name?: string
           nickname?: string | null
           notes?: string | null
+          parent_plant_id?: string | null
+          retired_at?: string | null
+          retirement_note?: string | null
+          season_end_month?: number | null
+          season_start_month?: number | null
+          soil_type?: string | null
           species?: string | null
           tags?: string[]
         }
@@ -117,6 +147,13 @@ export type Database = {
             columns: ["last_scan_id"]
             isOneToOne: false
             referencedRelation: "scans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "garden_plants_parent_plant_id_fkey"
+            columns: ["parent_plant_id"]
+            isOneToOne: false
+            referencedRelation: "garden_plants"
             referencedColumns: ["id"]
           },
         ]
@@ -250,6 +287,62 @@ export type Database = {
         }
         Relationships: []
       }
+      plant_events: {
+        Row: {
+          cost: number | null
+          created_at: string
+          currency: string
+          device_id: string
+          effectiveness: number | null
+          id: string
+          kind: string
+          note: string | null
+          occurred_on: string
+          plant_id: string
+          product: string | null
+          yield_amount: number | null
+          yield_unit: string | null
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string
+          currency?: string
+          device_id: string
+          effectiveness?: number | null
+          id?: string
+          kind: string
+          note?: string | null
+          occurred_on?: string
+          plant_id: string
+          product?: string | null
+          yield_amount?: number | null
+          yield_unit?: string | null
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string
+          currency?: string
+          device_id?: string
+          effectiveness?: number | null
+          id?: string
+          kind?: string
+          note?: string | null
+          occurred_on?: string
+          plant_id?: string
+          product?: string | null
+          yield_amount?: number | null
+          yield_unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_events_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "garden_plants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plant_library: {
         Row: {
           avoid_near: string | null
@@ -321,6 +414,44 @@ export type Database = {
           water?: string | null
         }
         Relationships: []
+      }
+      plant_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          device_id: string
+          id: string
+          image_url: string
+          plant_id: string
+          taken_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          device_id: string
+          id?: string
+          image_url: string
+          plant_id: string
+          taken_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          device_id?: string
+          id?: string
+          image_url?: string
+          plant_id?: string
+          taken_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plant_photos_plant_id_fkey"
+            columns: ["plant_id"]
+            isOneToOne: false
+            referencedRelation: "garden_plants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scans: {
         Row: {
