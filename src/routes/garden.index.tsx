@@ -27,7 +27,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/garden")({
+export const Route = createFileRoute("/garden/")({
   head: () => ({
     meta: [
       { title: "My Garden — Plant Doctor" },
