@@ -88,10 +88,11 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 Photos are stored in the `scans` storage bucket; scans are keyed by anonymous `device_id` so no sign-up is needed.
 
 ## 🔌 AI Flow
-1. Client uploads photo → gets public URL.
-2. Client calls `diagnose-plant` edge function (`supabase/functions/diagnose-plant`).
-3. Function calls Lovable AI (Gemini 2.5 Flash) with a strict structured-output schema.
-4. Result is inserted into `scans` and the app navigates to the results page.
+1. Client uploads photos → gets public URLs.
+2. Diagnosis calls `diagnose-plant`; identification calls `/api/identify`; voice notes call `/api/transcribe`.
+3. Each calls Lovable AI (Gemini 2.5 Flash vision, Gemini transcribe for audio) with a strict structured-output schema.
+4. Result is saved to `scans` / `identifications` and the app navigates to the result page.
+
 
 ## 🚀 Getting Started
 ```bash
@@ -106,7 +107,7 @@ src/
   assets/          # 3D clay icons, hero art, splash logo
   components/      # MobileLayout, Photo3DPreview, SplashScreen, UI kit
   lib/             # device id + utils
-  routes/          # /, /scan, /scan/$scanId, /garden, /library
+  routes/          # /, /scan, /identify, /garden, /library, /guides, /api/*
 supabase/
   functions/diagnose-plant/   # AI diagnosis function
   migrations/                 # schema + seed data
