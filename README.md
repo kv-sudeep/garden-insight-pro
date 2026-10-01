@@ -23,7 +23,7 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 - **3D action buttons** — buy treatment online (shop link) and **Save to My Garden**.
 
 ### 🪴 My Garden (`/garden`)
-- All saved plants with photo, health status, notes, nickname, spot and labels.
+All saved plants with photo, health status, notes, nickname, spot and labels.
 - **Add a plant by hand** — name, nickname, species, category, location and labels without scanning, with duplicate-name warning.
 - **Nicknames** shown as the headline, real name underneath.
 - **Labels/tags** (indoor, outdoor, gift, for-sale…) with filter chips.
@@ -37,6 +37,7 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 - **Edit mode with note templates** — quick-add common action notes while editing.
 - **Care reminders panel** — upcoming tasks computed from your note history.
 
+> 🚧 **Advanced garden tracking is being built.** The database and core logic are ready for: multiple growth-timeline photos, a plant health score, propagated-plant family tree, CSV/PDF export & import, a garden map view, seasonal view, companion planting, a crop rotation planner, soil-type tracking, full repot/prune/pest-treatment history logs with effectiveness ratings, a cost tracker, a yield tracker, and a plant "retirement" screen. These screens will appear in the app as they are wired up.
 
 ### 🔎 Identify a Plant (`/identify`)
 - **Don't know the plant?** Add up to three photos (whole plant, leaf close-up, flower or fruit) and get an identification.
@@ -56,11 +57,10 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 - **🔊 Say it** — hear the scientific name pronounced out loud.
 - Link through to the disease & pest guides.
 
-
 ### 🏠 Home (`/`)
 - Hero with **3D Pixar-style illustration**, animated "AI-powered" badge, and scan CTA.
 - Feature chips with **glossy 3D clay icons** (plants covered, treatment plans, instant AI).
-- **Recent scans** grid linking straight to results.
+- Recent scans grid linking straight to results.
 
 ### 🎬 Splash Screen & 3D Design
 - Animated **3D KrushiMitra AI** splash on first open each session — pops in, floats, fades out.
@@ -80,10 +80,13 @@ A mobile-first AI app that diagnoses plant diseases from a single photo and help
 | `scans` | Every diagnosis: photo URLs, notes, plant, disease, severity, confidence, treatment fields |
 | `identifications` | Plant ID results: names, family, confidence, full care & safety profile |
 | `garden_plants` | Saved plants with nickname, labels, spot, notes, category, care history, archive state |
+| `plant_events` | Care history per plant: watering, feeding, repotting, pruning, pest treatment (with effectiveness), costs, harvests, notes |
+| `plant_photos` | Growth-timeline photos per plant |
 | `plant_library` | Care guide catalog (care, soil pH, toxicity, edible parts, companions, invasive notes, pronunciation) |
 | `diseases` | Browsable guides for diseases, disorders and nutrient shortages |
 | `pests` | Browsable pest guides (identify, damage, lifecycle, treatment, prevention) |
 
+`garden_plants` also carries the fields behind the upcoming advanced tracking: parent plant link (family tree), soil type, bed, map position, season months, acquisition date and retirement note.
 
 Photos are stored in the `scans` storage bucket; scans are keyed by anonymous `device_id` so no sign-up is needed.
 
@@ -92,7 +95,6 @@ Photos are stored in the `scans` storage bucket; scans are keyed by anonymous `d
 2. Diagnosis calls `diagnose-plant`; identification calls `/api/identify`; voice notes call `/api/transcribe`.
 3. Each calls Lovable AI (Gemini 2.5 Flash vision, Gemini transcribe for audio) with a strict structured-output schema.
 4. Result is saved to `scans` / `identifications` and the app navigates to the result page.
-
 
 ## 🚀 Getting Started
 ```bash
@@ -105,8 +107,10 @@ Open the preview, tap **Scan a plant**, and diagnose your first leaf.
 ```
 src/
   assets/          # 3D clay icons, hero art, splash logo
-  components/      # MobileLayout, Photo3DPreview, SplashScreen, UI kit
-  lib/             # device id + utils
+  components/      # MobileLayout, Photo3DPreview, SplashScreen, GuideSection, UI kit
+  lib/             # device id, photo quality + hashing, voice recorder,
+                   # garden logic (health score, companions, rotation, seasons),
+                   # garden CSV export/import + printable PDF
   routes/          # /, /scan, /identify, /garden, /library, /guides, /api/*
 supabase/
   functions/diagnose-plant/   # AI diagnosis function
