@@ -23,10 +23,13 @@ import { Route as GardenIndexRouteImport } from './routes/garden.index'
 import { Route as ScanScanIdRouteImport } from './routes/scan.$scanId'
 import { Route as LibraryPlantIdRouteImport } from './routes/library.$plantId'
 import { Route as IdentifyIdIdRouteImport } from './routes/identify.$idId'
+import { Route as GardenToolsRouteImport } from './routes/garden.tools'
+import { Route as GardenPlantIdRouteImport } from './routes/garden.$plantId'
 import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
 import { Route as ApiIdentifyRouteImport } from './routes/api/identify'
 import { Route as GuidesPestSlugRouteImport } from './routes/guides.pest.$slug'
 import { Route as GuidesDiseaseSlugRouteImport } from './routes/guides.disease.$slug'
+import { Route as GardenRetirePlantIdRouteImport } from './routes/garden.retire.$plantId'
 
 const ScanRoute = ScanRouteImport.update({
   id: '/scan',
@@ -98,6 +101,16 @@ const IdentifyIdIdRoute = IdentifyIdIdRouteImport.update({
   path: '/$idId',
   getParentRoute: () => IdentifyRoute,
 } as any)
+const GardenToolsRoute = GardenToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => GardenRoute,
+} as any)
+const GardenPlantIdRoute = GardenPlantIdRouteImport.update({
+  id: '/$plantId',
+  path: '/$plantId',
+  getParentRoute: () => GardenRoute,
+} as any)
 const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
   id: '/api/transcribe',
   path: '/api/transcribe',
@@ -118,6 +131,11 @@ const GuidesDiseaseSlugRoute = GuidesDiseaseSlugRouteImport.update({
   path: '/disease/$slug',
   getParentRoute: () => GuidesRoute,
 } as any)
+const GardenRetirePlantIdRoute = GardenRetirePlantIdRouteImport.update({
+  id: '/retire/$plantId',
+  path: '/retire/$plantId',
+  getParentRoute: () => GardenRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -128,6 +146,8 @@ export interface FileRoutesByFullPath {
   '/scan': typeof ScanRouteWithChildren
   '/api/identify': typeof ApiIdentifyRoute
   '/api/transcribe': typeof ApiTranscribeRoute
+  '/garden/$plantId': typeof GardenPlantIdRoute
+  '/garden/tools': typeof GardenToolsRoute
   '/identify/$idId': typeof IdentifyIdIdRoute
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
@@ -136,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/identify/': typeof IdentifyIndexRoute
   '/library/': typeof LibraryIndexRoute
   '/scan/': typeof ScanIndexRoute
+  '/garden/retire/$plantId': typeof GardenRetirePlantIdRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
   '/guides/pest/$slug': typeof GuidesPestSlugRoute
 }
@@ -143,6 +164,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/identify': typeof ApiIdentifyRoute
   '/api/transcribe': typeof ApiTranscribeRoute
+  '/garden/$plantId': typeof GardenPlantIdRoute
+  '/garden/tools': typeof GardenToolsRoute
   '/identify/$idId': typeof IdentifyIdIdRoute
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
@@ -151,6 +174,7 @@ export interface FileRoutesByTo {
   '/identify': typeof IdentifyIndexRoute
   '/library': typeof LibraryIndexRoute
   '/scan': typeof ScanIndexRoute
+  '/garden/retire/$plantId': typeof GardenRetirePlantIdRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
   '/guides/pest/$slug': typeof GuidesPestSlugRoute
 }
@@ -164,6 +188,8 @@ export interface FileRoutesById {
   '/scan': typeof ScanRouteWithChildren
   '/api/identify': typeof ApiIdentifyRoute
   '/api/transcribe': typeof ApiTranscribeRoute
+  '/garden/$plantId': typeof GardenPlantIdRoute
+  '/garden/tools': typeof GardenToolsRoute
   '/identify/$idId': typeof IdentifyIdIdRoute
   '/library/$plantId': typeof LibraryPlantIdRoute
   '/scan/$scanId': typeof ScanScanIdRoute
@@ -172,6 +198,7 @@ export interface FileRoutesById {
   '/identify/': typeof IdentifyIndexRoute
   '/library/': typeof LibraryIndexRoute
   '/scan/': typeof ScanIndexRoute
+  '/garden/retire/$plantId': typeof GardenRetirePlantIdRoute
   '/guides/disease/$slug': typeof GuidesDiseaseSlugRoute
   '/guides/pest/$slug': typeof GuidesPestSlugRoute
 }
@@ -186,6 +213,8 @@ export interface FileRouteTypes {
     | '/scan'
     | '/api/identify'
     | '/api/transcribe'
+    | '/garden/$plantId'
+    | '/garden/tools'
     | '/identify/$idId'
     | '/library/$plantId'
     | '/scan/$scanId'
@@ -194,6 +223,7 @@ export interface FileRouteTypes {
     | '/identify/'
     | '/library/'
     | '/scan/'
+    | '/garden/retire/$plantId'
     | '/guides/disease/$slug'
     | '/guides/pest/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -201,6 +231,8 @@ export interface FileRouteTypes {
     | '/'
     | '/api/identify'
     | '/api/transcribe'
+    | '/garden/$plantId'
+    | '/garden/tools'
     | '/identify/$idId'
     | '/library/$plantId'
     | '/scan/$scanId'
@@ -209,6 +241,7 @@ export interface FileRouteTypes {
     | '/identify'
     | '/library'
     | '/scan'
+    | '/garden/retire/$plantId'
     | '/guides/disease/$slug'
     | '/guides/pest/$slug'
   id:
@@ -221,6 +254,8 @@ export interface FileRouteTypes {
     | '/scan'
     | '/api/identify'
     | '/api/transcribe'
+    | '/garden/$plantId'
+    | '/garden/tools'
     | '/identify/$idId'
     | '/library/$plantId'
     | '/scan/$scanId'
@@ -229,6 +264,7 @@ export interface FileRouteTypes {
     | '/identify/'
     | '/library/'
     | '/scan/'
+    | '/garden/retire/$plantId'
     | '/guides/disease/$slug'
     | '/guides/pest/$slug'
   fileRoutesById: FileRoutesById
@@ -344,6 +380,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IdentifyIdIdRouteImport
       parentRoute: typeof IdentifyRoute
     }
+    '/garden/tools': {
+      id: '/garden/tools'
+      path: '/tools'
+      fullPath: '/garden/tools'
+      preLoaderRoute: typeof GardenToolsRouteImport
+      parentRoute: typeof GardenRoute
+    }
+    '/garden/$plantId': {
+      id: '/garden/$plantId'
+      path: '/$plantId'
+      fullPath: '/garden/$plantId'
+      preLoaderRoute: typeof GardenPlantIdRouteImport
+      parentRoute: typeof GardenRoute
+    }
     '/api/transcribe': {
       id: '/api/transcribe'
       path: '/api/transcribe'
@@ -372,15 +422,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesDiseaseSlugRouteImport
       parentRoute: typeof GuidesRoute
     }
+    '/garden/retire/$plantId': {
+      id: '/garden/retire/$plantId'
+      path: '/retire/$plantId'
+      fullPath: '/garden/retire/$plantId'
+      preLoaderRoute: typeof GardenRetirePlantIdRouteImport
+      parentRoute: typeof GardenRoute
+    }
   }
 }
 
 interface GardenRouteChildren {
+  GardenPlantIdRoute: typeof GardenPlantIdRoute
+  GardenToolsRoute: typeof GardenToolsRoute
   GardenIndexRoute: typeof GardenIndexRoute
+  GardenRetirePlantIdRoute: typeof GardenRetirePlantIdRoute
 }
 
 const GardenRouteChildren: GardenRouteChildren = {
+  GardenPlantIdRoute: GardenPlantIdRoute,
+  GardenToolsRoute: GardenToolsRoute,
   GardenIndexRoute: GardenIndexRoute,
+  GardenRetirePlantIdRoute: GardenRetirePlantIdRoute,
 }
 
 const GardenRouteWithChildren =
