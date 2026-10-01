@@ -90,7 +90,11 @@ function PlantDetail() {
   async function update(patch: Partial<GardenPlant>) {
     if (!plant) return;
     setPlant({ ...plant, ...patch });
-    const { error } = await supabase.from("garden_plants").update(patch).eq("id", plant.id);
+    const { tags, ...rest } = patch;
+    const { error } = await supabase
+      .from("garden_plants")
+      .update({ ...rest, ...(tags ? { tags } : {}) })
+      .eq("id", plant.id);
     if (error) toast.error("Could not save");
   }
 
