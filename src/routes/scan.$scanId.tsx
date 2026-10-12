@@ -17,6 +17,14 @@ import iconGarden from "@/assets/icon-garden.png";
 import iconSymptoms from "@/assets/icon-symptoms.png";
 
 export const Route = createFileRoute("/scan/$scanId")({
+  head: () => ({ meta: [
+    { title: "Plant Diagnosis Results — KrushiMitra AI" },
+    { name: "description", content: "Review your plant diagnosis, treatment steps and next care actions." },
+    { property: "og:title", content: "Plant Diagnosis Results — KrushiMitra AI" },
+    { property: "og:description", content: "Review your plant diagnosis, treatment steps and next care actions." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: ScanDetail,
   errorComponent: ({ error, reset }) => {
     const router = useRouter();

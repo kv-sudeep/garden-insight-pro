@@ -6,6 +6,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { GuideSection, StepList } from "@/components/GuideSection";
 
 export const Route = createFileRoute("/library/$plantId")({
+  head: () => ({ meta: [
+    { title: "Plant Care & Safety — KrushiMitra AI" },
+    { name: "description", content: "Explore watering, soil, toxicity and companion planting information." },
+    { property: "og:title", content: "Plant Care & Safety — KrushiMitra AI" },
+    { property: "og:description", content: "Explore watering, soil, toxicity and companion planting information." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: PlantDetail,
   notFoundComponent: () => (
     <MobileLayout>
