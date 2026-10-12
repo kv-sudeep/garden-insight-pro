@@ -1,7 +1,7 @@
 export function GuideSection({ title, body }: { title: string; body: string | null }) {
   if (!body) return null;
   return (
-    <div className="mb-3 rounded-2xl bg-card p-4 shadow-soft">
+    <div className="mb-4 border-b border-border pb-4">
       <h3 className="mb-1 text-sm font-semibold">{title}</h3>
       <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
     </div>
@@ -20,7 +20,7 @@ export function StepList({ title, body }: { title: string; body: string | null }
   if (!body) return null;
   const steps = splitSteps(body);
   return (
-    <div className="mb-3 rounded-2xl bg-card p-4 shadow-soft">
+    <div className="mb-4 border-b border-border pb-4">
       <h3 className="mb-2 text-sm font-semibold">{title}</h3>
       <ol className="space-y-2">
         {steps.map((s, i) => (

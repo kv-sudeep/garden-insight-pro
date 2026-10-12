@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, ArrowLeft, ChevronRight, SlidersHorizontal, ShieldCheck, Bug, Leaf } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import diseaseLeaf from "@/assets/disease-leaf.jpg";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/guides/")({
@@ -54,6 +56,7 @@ function Guides() {
   const [pests, setPests] = useState<Pest[]>([]);
   const [q, setQ] = useState("");
   const [kind, setKind] = useState<string | null>(null);
+  const [sort, setSort] = useState("name");
 
   useEffect(() => {
     supabase
@@ -97,8 +100,8 @@ function Guides() {
           !needle ||
           `${r.name} ${r.sub ?? ""} ${r.summary ?? ""}`.toLowerCase().includes(needle)
       )
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [diseases, pests, q, kind]);
+      .sort((a, b) => sort === "severity" ? (a.badge ?? "").localeCompare(b.badge ?? "") || a.name.localeCompare(b.name) : a.name.localeCompare(b.name));
+  }, [diseases, pests, q, kind, sort]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = { pest: pests.length };
@@ -108,11 +111,12 @@ function Guides() {
 
   return (
     <MobileLayout>
-      <div className="px-6 pt-10">
-        <h1 className="text-2xl font-bold">Problem guides</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Diseases, disorders, nutrient shortages and pests — browse any time, no photo needed.
-        </p>
+      <div className="px-5 pt-7">
+        <div className="flex items-center justify-between">
+          <Link to="/" aria-label="Back to home" className="glass-panel flex h-9 w-9 items-center justify-center rounded-full"><ArrowLeft className="h-4 w-4"/></Link>
+          <h1 className="text-lg font-semibold">Find Plant Diseases</h1>
+          <SlidersHorizontal className="h-5 w-5 text-accent" aria-hidden="true"/>
+        </div>
 
         <div className="relative mt-4">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -120,12 +124,12 @@ function Guides() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search symptoms, names, plants…"
-            className="h-12 rounded-2xl border-border bg-card pl-10"
+            className="glass-panel h-11 rounded-full pl-10 text-xs"
           />
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Chip active={kind === null} onClick={() => setKind(null)} label="All" count={rows.length} />
+        <div className="mt-4 flex gap-1 overflow-x-auto pb-2">
+          <Chip active={kind === null} onClick={() => setKind(null)} label="All" count={diseases.length + pests.length} />
           {KINDS.map((k) => (
             <Chip
               key={k.key}
@@ -137,7 +141,8 @@ function Guides() {
           ))}
         </div>
 
-        <div className="mt-6 space-y-2">
+        <div className="my-4 flex items-center justify-between gap-2 text-[11px] text-muted-foreground"><span>{rows.length} Guides Found</span><label className="flex items-center gap-1">Sort by: <select aria-label="Sort guides" value={sort} onChange={e => setSort(e.target.value)} className="bg-background text-foreground"><option value="name">Name</option><option value="severity">Severity</option></select></label></div>
+        <div className="space-y-3">
           {rows.length === 0 && (
             <p className="py-10 text-center text-sm text-muted-foreground">Nothing matches that.</p>
           )}
@@ -146,22 +151,17 @@ function Guides() {
               key={`${r.type}-${r.slug}`}
               to={r.type === "pest" ? "/guides/pest/$slug" : "/guides/disease/$slug"}
               params={{ slug: r.slug }}
-              className="block rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
+              className="glass-panel flex min-h-28 overflow-hidden rounded-lg transition-transform hover:-translate-y-0.5"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="font-semibold">{r.name}</div>
-                  {r.sub && <div className="mt-0.5 text-xs text-muted-foreground">{r.sub}</div>}
-                </div>
-                {r.badge && (
-                  <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground">
-                    {r.badge}
-                  </span>
-                )}
+              <div className="flex w-28 shrink-0 items-center justify-center bg-background/50">
+                {r.slug === "powdery-mildew" ? <img src={diseaseLeaf} alt="Illustrative powdery mildew leaf" width={1024} height={768} className="h-full w-full object-cover"/> : r.type === "pest" ? <Bug className="neon-icon h-12 w-12" strokeWidth={1.1}/> : r.kind === "deficiency" ? <Leaf className="neon-icon h-12 w-12" strokeWidth={1.1}/> : <ShieldCheck className="neon-icon h-12 w-12" strokeWidth={1.1}/>}
               </div>
-              {r.summary && (
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{r.summary}</p>
-              )}
+              <div className="min-w-0 flex-1 p-3">
+                <div className="flex items-center justify-between gap-2"><h2 className="text-sm font-semibold">{r.name}</h2><ChevronRight className="h-4 w-4 shrink-0 text-accent"/></div>
+                <p className="mt-1 line-clamp-1 text-[10px] text-muted-foreground">{r.sub || r.kind}</p>
+                <p className="mt-2 line-clamp-2 text-[11px] leading-4 text-muted-foreground">{r.summary}</p>
+                {r.badge && <p className="mt-2 text-[10px] capitalize text-accent">{r.badge} severity</p>}
+              </div>
             </Link>
           ))}
         </div>
@@ -182,20 +182,22 @@ function Chip({
   count: number;
 }) {
   return (
-    <button
+    <Button
+      variant="ghost"
+      aria-pressed={active}
       onClick={onClick}
-      className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-        active ? "bg-leaf text-leaf-foreground" : "bg-card text-muted-foreground hover:bg-secondary"
+      className={`h-9 shrink-0 gap-1 rounded-lg px-2 text-[10px] font-medium transition-colors ${
+        active ? "blue-button" : "text-muted-foreground hover:bg-secondary"
       }`}
     >
       {label}
       <span
         className={`rounded-full px-1.5 text-[10px] ${
-          active ? "bg-white/25" : "bg-secondary text-muted-foreground"
+          active ? "bg-primary-foreground/20" : "bg-secondary text-muted-foreground"
         }`}
       >
         {count}
       </span>
-    </button>
+    </Button>
   );
 }

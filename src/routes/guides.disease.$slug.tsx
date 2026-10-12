@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Camera, ShieldCheck, Leaf, Activity, ArrowRight } from "lucide-react";
+import diseaseLeaf from "@/assets/disease-leaf.jpg";
+import { Button } from "@/components/ui/button";
 import { MobileLayout } from "@/components/MobileLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { GuideSection, StepList } from "@/components/GuideSection";
@@ -72,31 +74,26 @@ function DiseaseGuide() {
 
   return (
     <MobileLayout>
-      <div className="bg-gradient-leaf px-6 pb-8 pt-10 text-leaf-foreground">
-        <Link
-          to="/guides"
-          className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
-        <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-wider">
-          <span className="rounded-full bg-white/20 px-2 py-0.5">{item.kind}</span>
-          {item.severity && (
-            <span className="rounded-full bg-white/20 px-2 py-0.5">{item.severity}</span>
-          )}
+      <div className="px-5 pt-7">
+        <div className="mb-5 flex items-center justify-between"><Link to="/guides" aria-label="Back to search" className="glass-panel flex h-9 w-9 items-center justify-center rounded-full"><ArrowLeft className="h-4 w-4"/></Link><span className="text-sm font-medium">Disease Details</span><ShieldCheck className="h-5 w-5 text-accent"/></div>
+        <h1 className="text-2xl font-bold">{item.name}</h1>
+        {item.pathogen && <p className="mt-1 text-xs italic text-muted-foreground">{item.pathogen}</p>}
+        <div className="mt-3 text-[10px] capitalize text-accent">{item.kind} · {item.severity || "Plant health"}</div>
+        {item.slug === "powdery-mildew" ? <figure className="my-4"><img src={diseaseLeaf} alt="Illustrative leaf with powdery mildew" width={1024} height={768} className="aspect-[4/3] w-full rounded-lg object-cover"/><figcaption className="mt-1 text-[9px] text-muted-foreground">Illustrative disease appearance</figcaption></figure> : <div className="my-4 flex h-44 items-center justify-center"><Leaf className="neon-icon h-28 w-28" strokeWidth={0.7}/></div>}
+        <div className="mb-5 grid grid-cols-3 gap-2">
+          <div className="glass-panel rounded-lg p-3 text-center"><Activity className="mx-auto mb-2 h-4 w-4 text-accent"/><p className="text-[9px] text-muted-foreground">Severity</p><p className="mt-1 text-xs capitalize">{item.severity || "Varies"}</p></div>
+          <div className="glass-panel rounded-lg p-3 text-center"><Leaf className="mx-auto mb-2 h-4 w-4 text-accent"/><p className="text-[9px] text-muted-foreground">Category</p><p className="mt-1 text-xs capitalize">{item.kind}</p></div>
+          <div className="glass-panel rounded-lg p-3 text-center"><ShieldCheck className="mx-auto mb-2 h-4 w-4 text-accent"/><p className="text-[9px] text-muted-foreground">Care</p><p className="mt-1 text-xs">Treatment</p></div>
         </div>
-        <h1 className="mt-2 text-3xl font-bold">{item.name}</h1>
-        {item.pathogen && <p className="text-sm italic opacity-80">{item.pathogen}</p>}
-        {item.summary && <p className="mt-3 text-sm opacity-90">{item.summary}</p>}
-      </div>
-
-      <div className="px-6 pt-6">
+        <h2 className="mb-2 text-sm font-semibold">About the Disease</h2>
+        {item.summary && <p className="mb-5 text-sm leading-6 text-muted-foreground">{item.summary}</p>}
         <GuideSection title="Affects" body={item.affects} />
         <GuideSection title="What you'll see" body={item.symptoms} />
         <GuideSection title="Why it happens" body={item.causes} />
         <StepList title="Treatment" body={item.treatment} />
         <StepList title="Organic / home remedy" body={item.organic_treatment} />
         <StepList title="Prevention" body={item.prevention} />
+        <Button asChild className="blue-button mt-4 h-12 w-full rounded-lg"><Link to="/scan"><Camera className="h-4 w-4"/>Check My Plant<ArrowRight className="ml-auto h-4 w-4"/></Link></Button>
       </div>
     </MobileLayout>
   );
