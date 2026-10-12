@@ -1,164 +1,55 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Camera, Sparkles } from "lucide-react";
+import { Camera, Search, Sprout, ShieldCheck, ScanLine, BookOpen, ArrowRight, ChevronRight, Leaf, Bug } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
-import heroLeaves from "@/assets/hero-leaves.jpg";
-import iconLeaf from "@/assets/icon-leaf.png";
-import iconShield from "@/assets/icon-shield.png";
-import iconSparkle from "@/assets/icon-sparkle.png";
-
+import plantHero from "@/assets/plant-blue-hero.jpg";
+import diseaseLeaf from "@/assets/disease-leaf.jpg";
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Plant Doctor — AI Plant Disease Detection" },
-      {
-        name: "description",
-        content:
-          "Snap a photo of any plant and get instant AI diagnosis, treatment plans, and care tips.",
-      },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [
+    { title: "KrushiMitra AI — Your Plant Doctor" },
+    { name: "description", content: "Identify plants, diagnose plant diseases and care for your garden with KrushiMitra AI." },
+    { property: "og:title", content: "KrushiMitra AI — Your Plant Doctor" },
+    { property: "og:description", content: "Identify, diagnose and grow a healthier garden." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }), component: Index,
 });
-
-type Scan = {
-  id: string;
-  plant_name: string | null;
-  disease_name: string | null;
-  is_healthy: boolean | null;
-  image_url: string;
-  created_at: string;
-};
-
+type Scan = { id: string; plant_name: string | null; disease_name: string | null; is_healthy: boolean | null; image_url: string; created_at: string };
+const actions = [ { to: "/scan", label: "Scan Plant", icon: Camera }, { to: "/identify", label: "Identify", icon: ScanLine }, { to: "/guides", label: "Diseases", icon: ShieldCheck }, { to: "/garden", label: "My Garden", icon: Sprout }, { to: "/library", label: "Care Guides", icon: BookOpen } ] as const;
 function Index() {
   const [recent, setRecent] = useState<Scan[]>([]);
-
-  useEffect(() => {
-    const deviceId = getDeviceId();
-    supabase
-      .from("scans")
-      .select("id, plant_name, disease_name, is_healthy, image_url, created_at")
-      .eq("device_id", deviceId)
-      .order("created_at", { ascending: false })
-      .limit(4)
-      .then(({ data }) => setRecent((data as Scan[]) ?? []));
-  }, []);
-
-  return (
-    <MobileLayout>
-      <header className="relative overflow-hidden rounded-b-[2rem] bg-gradient-hero px-6 pb-10 pt-12 text-leaf-foreground shadow-leaf">
-        <img
-          src={heroLeaves}
-          alt=""
-          width={1280}
-          height={896}
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        />
-        <div className="relative">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5" /> AI-powered
-          </div>
-          <h1 className="text-3xl font-bold leading-tight">Plant Doctor</h1>
-          <p className="mt-2 text-sm text-white/80">
-            Diagnose any plant disease in seconds with a single photo.
-          </p>
-          <Link to="/scan" className="mt-6 inline-block">
-            <Button size="lg" className="rounded-full bg-white text-leaf hover:bg-white/90">
-              <Camera className="mr-2 h-5 w-5" /> Scan a plant
-            </Button>
-          </Link>
+  useEffect(() => { supabase.from("scans").select("id, plant_name, disease_name, is_healthy, image_url, created_at").eq("device_id", getDeviceId()).order("created_at", { ascending: false }).limit(4).then(({ data }) => setRecent((data as Scan[]) ?? [])); }, []);
+  return <MobileLayout>
+    <header className="flex items-center justify-between px-5 pb-4 pt-7">
+      <Leaf className="neon-icon h-6 w-6"/><h1 className="text-xl font-bold italic">KrushiMitra<span className="text-accent"> AI</span></h1>
+      <Link to="/garden" aria-label="My garden" className="glass-panel flex h-9 w-9 items-center justify-center rounded-full"><Sprout className="h-4 w-4"/></Link>
+    </header>
+    <div className="px-5">
+      <Link to="/guides" className="glass-panel mb-4 flex h-11 items-center gap-3 rounded-full px-4 text-xs text-muted-foreground"><Search className="h-4 w-4"/>Search plants, diseases, symptoms…</Link>
+      <section className="hero-frame relative min-h-56 overflow-hidden rounded-2xl">
+        <img src={plantHero} width={1280} height={1024} alt="Healthy monstera plant" className="absolute inset-0 h-full w-full object-cover"/>
+        <div className="relative max-w-[62%] px-4 pb-7 pt-6">
+          <h2 className="text-2xl font-bold leading-tight">Your Personal<br/><span className="text-accent">Plant Doctor</span></h2>
+          <p className="mb-4 mt-3 max-w-36 text-xs leading-5 text-muted-foreground">Expert care for every leaf. A healthier garden starts here.</p>
+          <Button asChild className="blue-button h-9 rounded-lg px-3 text-xs"><Link to="/scan">Scan a Plant <ArrowRight className="h-3.5 w-3.5"/></Link></Button>
         </div>
-      </header>
-
-      <section className="grid grid-cols-3 gap-3 px-6 py-6">
-        <FeatureChip icon={iconLeaf} label="100+ plants" />
-        <FeatureChip icon={iconShield} label="Treatment plans" />
-        <FeatureChip icon={iconSparkle} label="Instant AI" />
       </section>
-
-      <section className="grid grid-cols-2 gap-3 px-6 pb-6">
-        <Link
-          to="/identify"
-          className="rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
-        >
-          <div className="text-sm font-semibold">Identify a plant</div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Don't know the name? Snap a photo.
-          </p>
-        </Link>
-        <Link
-          to="/guides"
-          className="rounded-2xl bg-card p-4 shadow-soft transition-transform hover:-translate-y-0.5"
-        >
-          <div className="text-sm font-semibold">Disease & pest guides</div>
-          <p className="mt-1 text-xs text-muted-foreground">Browse problems without a photo.</p>
-        </Link>
-      </section>
-
-      <section className="px-6">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Recent scans</h2>
-          {recent.length > 0 && (
-            <Link to="/garden" className="text-sm text-leaf">
-              View all
-            </Link>
-          )}
+      <div className="my-3 flex justify-center gap-1.5"><span className="h-1 w-4 rounded-full bg-primary"/><span className="h-1 w-1 rounded-full bg-muted-foreground"/><span className="h-1 w-1 rounded-full bg-muted-foreground"/></div>
+      <div className="grid grid-cols-5 gap-2">
+        {actions.map(({to,label,icon:Icon}) => <Link key={to} to={to} className="glass-panel flex h-[78px] flex-col items-center justify-center gap-2 rounded-lg text-center text-[9px]"><Icon className="neon-icon h-6 w-6" strokeWidth={1.4}/>{label}</Link>)}
+      </div>
+      <section className="mt-6">
+        <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-semibold">Plant Health Guides</h2><Link to="/guides" className="flex items-center text-[11px] text-accent">View All <ChevronRight className="h-3 w-3"/></Link></div>
+        <div className="grid grid-cols-2 gap-3">
+          <Link to="/guides/disease/$slug" params={{slug:"powdery-mildew"}} className="glass-panel overflow-hidden rounded-lg"><img src={diseaseLeaf} alt="Illustrative powdery mildew leaf" width={1024} height={768} className="h-24 w-full object-cover"/><div className="p-3"><p className="text-xs font-semibold">Powdery Mildew</p><p className="mt-1 text-[10px] text-muted-foreground">Symptoms & treatment</p></div></Link>
+          <Link to="/guides" className="glass-panel flex flex-col justify-center rounded-lg p-4"><Bug className="neon-icon mb-3 h-9 w-9" strokeWidth={1.2}/><p className="text-xs font-semibold">Disease & Pest Library</p><p className="mt-1 text-[10px] leading-4 text-muted-foreground">Find the right care for your plants</p></Link>
         </div>
-        {recent.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center text-sm text-muted-foreground">
-            No scans yet. Tap “Scan a plant” to get started.
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {recent.map((s) => (
-              <Link
-                key={s.id}
-                to="/scan/$scanId"
-                params={{ scanId: s.id }}
-                className="group overflow-hidden rounded-2xl bg-card shadow-soft transition-transform hover:-translate-y-0.5"
-              >
-                <div className="aspect-square overflow-hidden">
-                  <img
-                    src={s.image_url}
-                    alt={s.plant_name ?? "Scan"}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-3">
-                  <div className="truncate text-sm font-semibold">{s.plant_name ?? "Unknown"}</div>
-                  <div
-                    className={`truncate text-xs ${
-                      s.is_healthy ? "text-success" : "text-danger"
-                    }`}
-                  >
-                    {s.is_healthy ? "Healthy" : (s.disease_name ?? "Issue detected")}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
       </section>
-    </MobileLayout>
-  );
-}
-
-function FeatureChip({ icon, label }: { icon: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-secondary to-secondary/40 p-3 text-center shadow-soft transition-transform hover:-translate-y-1 hover:scale-105">
-      <img
-        src={icon}
-        alt=""
-        width={48}
-        height={48}
-        loading="lazy"
-        className="h-12 w-12 object-contain drop-shadow-lg"
-      />
-      <span className="text-xs font-medium text-secondary-foreground">{label}</span>
+      <section className="mt-6"><div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-semibold">Recent Scans</h2><Link to="/garden" className="text-[11px] text-accent">My Garden ›</Link></div>
+        {recent.length === 0 ? <div className="glass-panel flex items-center gap-3 rounded-lg p-4"><ScanLine className="neon-icon h-7 w-7"/><div><p className="text-xs font-medium">No scans yet</p><p className="mt-1 text-[11px] text-muted-foreground">Your plants’ health journey starts here.</p></div></div> : <div className="space-y-2">{recent.map(s => <Link key={s.id} to="/scan/$scanId" params={{scanId:s.id}} className="glass-panel flex gap-3 overflow-hidden rounded-lg"><img src={s.image_url} alt={s.plant_name ?? "Plant"} className="h-20 w-24 object-cover"/><div className="py-3"><p className="text-sm font-semibold">{s.plant_name ?? "Unknown plant"}</p><p className={`mt-1 text-xs ${s.is_healthy ? "text-success" : "text-warning"}`}>{s.is_healthy ? "Healthy" : s.disease_name ?? "Issue detected"}</p></div></Link>)}</div>}
+      </section>
     </div>
-  );
+  </MobileLayout>;
 }
