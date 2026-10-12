@@ -163,3 +163,43 @@
     color: var(--color-foreground);
   }
 }
+
+/* Midnight glass visual system */
+:root, .dark {
+  --background: oklch(0.16 0.035 250);
+  --foreground: oklch(0.96 0.008 240);
+  --card: oklch(0.235 0.042 250);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.61 0.22 260);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.29 0.045 250);
+  --secondary-foreground: oklch(0.89 0.025 240);
+  --muted: oklch(0.24 0.035 250);
+  --muted-foreground: oklch(0.73 0.028 240);
+  --accent: oklch(0.74 0.13 245);
+  --accent-foreground: var(--background);
+  --border: oklch(0.52 0.06 245 / 0.42);
+  --input: var(--secondary);
+  --ring: var(--primary);
+  --leaf: var(--primary);
+  --leaf-foreground: var(--primary-foreground);
+  --success: oklch(0.78 0.15 155);
+  --gradient-leaf: linear-gradient(150deg, var(--secondary), var(--background));
+  --gradient-hero: linear-gradient(160deg, var(--card), var(--background));
+  --glass-surface: linear-gradient(145deg, oklch(0.43 0.055 245 / 0.5), oklch(0.23 0.04 250 / 0.75) 50%, oklch(0.3 0.055 250 / 0.5));
+  --button-surface: linear-gradient(180deg, oklch(0.7 0.18 255), oklch(0.5 0.24 263));
+  --shadow-soft: inset 0 1px 0 oklch(0.8 0.035 240 / 0.18), 0 8px 24px oklch(0.1 0.035 250 / 0.35);
+  --shadow-leaf: 0 0 25px oklch(0.6 0.2 255 / 0.22);
+  --glow-line: oklch(0.78 0.1 245 / 0.6);
+}
+body { font-family: 'Arial', sans-serif; letter-spacing: 0; }
+.glass-panel { background: var(--glass-surface); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+.blue-button { background: var(--button-surface); box-shadow: var(--shadow-leaf), inset 0 1px 0 var(--glow-line); border: 1px solid var(--border); color: var(--primary-foreground); }
+.app-frame { background: var(--gradient-hero); border-inline: 1px solid var(--border); }
+.hero-frame { border: 1px solid var(--glow-line); box-shadow: inset 0 0 18px var(--border), var(--shadow-leaf); }
+.neon-icon { filter: drop-shadow(0 0 7px var(--primary)); color: var(--accent); }
+.splash-enter { animation: splash-enter 700ms ease-out both; }
+@keyframes splash-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }

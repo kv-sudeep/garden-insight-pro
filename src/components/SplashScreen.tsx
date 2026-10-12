@@ -1,75 +1,34 @@
 import { useEffect, useState } from "react";
-import splashLogo from "@/assets/splash-logo.png";
-
+import { ArrowRight, Leaf } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import plantHero from "@/assets/plant-blue-hero.jpg";
 export function SplashScreen({ duration = 2200 }: { duration?: number }) {
   const [phase, setPhase] = useState<"in" | "out" | "gone">("in");
-
+  const [checked, setChecked] = useState(false);
   useEffect(() => {
-    if (sessionStorage.getItem("km_splash_seen")) {
-      setPhase("gone");
-      return;
-    }
-    const t1 = setTimeout(() => setPhase("out"), duration);
-    const t2 = setTimeout(() => {
-      setPhase("gone");
-      sessionStorage.setItem("km_splash_seen", "1");
-    }, duration + 500);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [duration]);
-
-  if (phase === "gone") return null;
-
-  return (
-    <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center bg-gradient-hero transition-opacity duration-500 ${
-        phase === "out" ? "opacity-0" : "opacity-100"
-      }`}
-      style={{ perspective: "1000px" }}
-      aria-hidden
-    >
-      {/* floating orbs */}
-      <div className="absolute left-10 top-20 h-24 w-24 animate-pulse rounded-full bg-white/10 blur-2xl" />
-      <div className="absolute bottom-24 right-10 h-32 w-32 animate-pulse rounded-full bg-white/10 blur-2xl" />
-
-      <div className="flex flex-col items-center gap-6">
-        <div className="splash-3d">
-          <img
-            src={splashLogo}
-            alt="KrushiMitra AI"
-            width={320}
-            height={320}
-            className="h-72 w-72 object-contain drop-shadow-2xl"
-          />
+    if (sessionStorage.getItem("km_splash_seen")) setPhase("gone");
+    setChecked(true);
+  }, []);
+  const dismiss = () => { setPhase("out"); sessionStorage.setItem("km_splash_seen", "1"); };
+  useEffect(() => { if (phase !== "out") return; const timer = setTimeout(() => setPhase("gone"), Math.min(duration, 500)); return () => clearTimeout(timer); }, [phase, duration]);
+  if (!checked || phase === "gone") return null;
+  return <div className={`fixed inset-0 z-[100] overflow-y-auto bg-background transition-opacity duration-500 ${phase === "out" ? "pointer-events-none opacity-0" : "opacity-100"}`}>
+    <div className="mx-auto flex min-h-[100svh] max-w-md items-center px-5 py-7">
+      <div className="hero-frame splash-enter relative flex min-h-[min(740px,88svh)] w-full flex-col overflow-hidden rounded-[28px] bg-background px-6 pb-8 pt-9">
+        <img src={plantHero} alt="Monstera in a metallic planter" width={1280} height={1024} className="absolute inset-0 h-full w-full object-cover object-[68%_center] opacity-75"/>
+        <div className="relative text-center">
+          <Leaf className="neon-icon mx-auto mb-3 h-12 w-12" strokeWidth={1.2}/>
+          <h1 className="text-3xl font-bold italic">KrushiMitra <span className="text-accent">AI</span></h1>
+          <p className="mt-2 text-sm">A healthier world, one plant at a time.</p>
+          <div className="mx-auto my-5 h-px w-10 bg-accent"/>
+          <p className="text-xs leading-6 text-muted-foreground">Discover. Diagnose. Grow.</p>
         </div>
-        <div className="text-center text-white">
-          <p className="text-xs font-medium uppercase tracking-[0.3em] opacity-80">
-            AI Plant Doctor
-          </p>
-          <div className="mt-4 flex justify-center gap-1.5">
-            <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]" />
-            <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]" />
-            <span className="h-2 w-2 animate-bounce rounded-full bg-white" />
-          </div>
+        <div className="relative mt-auto pt-64">
+          <Button onClick={dismiss} className="blue-button h-12 w-full rounded-full text-base">Get Started <ArrowRight className="ml-auto h-5 w-5"/></Button>
+          <p className="mt-5 text-center text-xs text-foreground">Your personal plant doctor</p>
+          <div className="mt-6 flex justify-center gap-2"><span className="h-1.5 w-5 rounded-full bg-primary"/><span className="h-1.5 w-1.5 rounded-full bg-muted-foreground"/><span className="h-1.5 w-1.5 rounded-full bg-muted-foreground"/></div>
         </div>
       </div>
-
-      <style>{`
-        .splash-3d {
-          transform-style: preserve-3d;
-          animation: splash-float 3s ease-in-out infinite, splash-pop 0.7s cubic-bezier(.34,1.56,.64,1) both;
-        }
-        @keyframes splash-float {
-          0%, 100% { transform: translateY(0) rotateY(-8deg) rotateX(4deg); }
-          50% { transform: translateY(-12px) rotateY(8deg) rotateX(-2deg); }
-        }
-        @keyframes splash-pop {
-          0% { transform: scale(0.6) rotateY(-30deg); opacity: 0; }
-          100% { transform: scale(1) rotateY(-8deg); opacity: 1; }
-        }
-      `}</style>
     </div>
-  );
+  </div>;
 }

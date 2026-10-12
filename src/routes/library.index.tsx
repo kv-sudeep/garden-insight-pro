@@ -8,8 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/library/")({
   head: () => ({
     meta: [
-      { title: "Plant Care Library — Plant Doctor" },
+      { title: "Plant Care Library — KrushiMitra AI" },
       { name: "description", content: "Care guides and disease info for popular plants." },
+      { property: "og:title", content: "Plant Care Library — KrushiMitra AI" },
+      { property: "og:description", content: "Care guides and disease info for popular plants." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Library,
