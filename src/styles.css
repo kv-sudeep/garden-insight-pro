@@ -193,6 +193,10 @@
   --shadow-soft: inset 0 1px 0 oklch(0.8 0.035 240 / 0.18), 0 8px 24px oklch(0.1 0.035 250 / 0.35);
   --shadow-leaf: 0 0 25px oklch(0.6 0.2 255 / 0.22);
   --glow-line: oklch(0.78 0.1 245 / 0.6);
+  --interaction-border: oklch(0.73 0.17 255);
+  --shadow-interaction: inset 0 0 12px oklch(0.62 0.22 260 / 0.16), 0 0 0 1px oklch(0.73 0.17 255 / 0.8), 0 0 18px oklch(0.62 0.22 260 / 0.6), 0 0 32px oklch(0.62 0.22 260 / 0.2);
+  --slideshow-shade: linear-gradient(90deg, oklch(0.13 0.035 250 / 0.94), oklch(0.13 0.035 250 / 0.7) 42%, oklch(0.13 0.035 250 / 0.06) 80%);
+  --slideshow-splash-shade: linear-gradient(180deg, oklch(0.13 0.035 250 / 0.9), oklch(0.13 0.035 250 / 0.12) 45%, oklch(0.13 0.035 250 / 0.9));
 }
 body { font-family: 'Arial', sans-serif; letter-spacing: 0; }
 .glass-panel { background: var(--glass-surface); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
@@ -215,3 +219,35 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 button, a, input, textarea, select { touch-action: manipulation; }
 .app-shell button, .app-navigation a { -webkit-tap-highlight-color: transparent; }
 .app-content :is(input, textarea, select) { font-size: 16px; }
+
+/* Shared touch, pointer and keyboard feedback without changing layout. */
+:is(.interactive-glow, button, [role="button"], [data-slot="card"], .glass-panel, .hero-frame, .bg-card, .bg-card\/80, .bg-card\/70, .bg-card\/60, .app-navigation a) {
+  transition: box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease, filter 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (hover: hover) {
+  :is(.interactive-glow, button, [role="button"], [data-slot="card"], .glass-panel, .hero-frame, .bg-card, .bg-card\/80, .bg-card\/70, .bg-card\/60, .app-navigation a):not(:disabled):not([aria-disabled="true"]):hover {
+    border-color: var(--interaction-border);
+    box-shadow: var(--shadow-interaction);
+  }
+}
+:is(.interactive-glow, button, [role="button"], [data-slot="card"], .glass-panel, .hero-frame, .bg-card, .bg-card\/80, .bg-card\/70, .bg-card\/60, .app-navigation a):not(:disabled):not([aria-disabled="true"]):is(:active, :focus-visible) {
+  border-color: var(--interaction-border);
+  box-shadow: var(--shadow-interaction);
+}
+.slideshow-image { opacity: 0; transform: scale(1.035); transition: opacity 900ms ease, transform 5500ms ease-out; }
+.slideshow-image.is-current { opacity: 1; transform: scale(1); }
+.slideshow-image-splash { object-position: 68% center; }
+.slideshow-shade { background: var(--slideshow-shade); }
+.slideshow-shade-splash { background: var(--slideshow-splash-shade); }
+.slide-copy { animation: splash-enter 500ms ease-out both; }
+.home-enter, .home-actions > a { animation: splash-enter 650ms ease-out both; }
+.home-actions > a:nth-child(2) { animation-delay: 70ms; }
+.home-actions > a:nth-child(3) { animation-delay: 140ms; }
+.home-actions > a:nth-child(4) { animation-delay: 210ms; }
+.home-actions > a:nth-child(5) { animation-delay: 280ms; }
+.home-enter-later { animation-delay: 180ms; }
+.home-enter-last { animation-delay: 260ms; }
+@media (prefers-reduced-motion: reduce) {
+  .slideshow-image { transform: none; }
+}
