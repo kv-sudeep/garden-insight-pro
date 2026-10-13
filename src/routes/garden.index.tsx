@@ -18,7 +18,7 @@ import {
   ArchiveRestore,
   MapPin,
   Tag,
-  Map,
+  Map as MapIcon,
 } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
@@ -470,7 +470,7 @@ function Garden() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button asChild variant="outline" size="icon" title="Garden planner"><Link to="/garden/tools" aria-label="Garden planner"><Map className="h-4 w-4" /></Link></Button>
+            <Button asChild variant="outline" size="icon" title="Garden planner"><Link to="/garden/tools" aria-label="Garden planner"><MapIcon className="h-4 w-4" /></Link></Button>
             {pool.length > 0 && (
               <Button variant="secondary"
                 onClick={() => {
