@@ -1,3 +1,5 @@
-# UI update
-- [x] Restyle splash, home, search and disease detail screens to match the reference.
-- [x] Verify search-to-disease navigation and screen layouts.
+# App experience
+- [ ] Apply a stable app shell with hidden scrollbars and phone safe areas to every screen.
+- [ ] Add home-screen installation metadata, icons and an install control (no offline caching).
+- [ ] Connect garden detail and planner screens from My Garden.
+- [ ] Verify navigation, scrolling and home-screen metadata.
