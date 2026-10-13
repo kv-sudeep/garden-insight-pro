@@ -31,7 +31,11 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { name: "theme-color", content: "#09131f" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "KrushiMitra" },
       { title: "Plant Doctor — AI Plant Disease Detection" },
       { name: "description", content: "Snap a photo of any plant and get instant AI diagnosis, treatment plans, and care tips." },
       { name: "author", content: "Plant Doctor" },
@@ -39,9 +43,11 @@ export const Route = createRootRoute({
       { property: "og:description", content: "AI plant disease detection in your pocket." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
+      { rel: "icon", type: "image/png", href: "/icons/icon-192.png" },
       {
         rel: "stylesheet",
         href: appCss,
