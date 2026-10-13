@@ -58,14 +58,18 @@ All saved plants with photo, health status, notes, nickname, spot and labels.
 - Link through to the disease & pest guides.
 
 ### 🏠 Home (`/`)
-- Hero with **3D Pixar-style illustration**, animated "AI-powered" badge, and scan CTA.
-- Feature chips with **glossy 3D clay icons** (plants covered, treatment plans, instant AI).
-- Recent scans grid linking straight to results.
+- Midnight-blue plant photo, scan action, disease search and quick links to identification, garden and library.
+- Recent scans link straight to results.
+- Home-screen install icon offers installation when supported, or platform-specific instructions.
 
-### 🎬 Splash Screen & 3D Design
-- Animated **3D KrushiMitra AI** splash on first open each session — pops in, floats, fades out.
-- Whole app styled with a **3D glossy/claymation language**: layered shadows, depth slabs, rounded cards, custom 3D icon set.
-- Mobile-first layout with bottom tab navigation (Home, Scan, ID, Garden, Library) using 3D icons.
+### 🎬 App presentation & home-screen installation
+- Glossy blue KrushiMitra AI splash on first open each session, dismissed with **Get Started**.
+- A fixed-height app shell with independently scrolling screens, hidden scrollbars and phone safe areas.
+- Persistent bottom tabs: Home, Search, Scan, My Garden and Library. Plant identification is available from Home.
+- Plant names in My Garden open the tracking screen; the map icon opens the garden planner.
+- Manifest-only home-screen support includes standalone launch, app icons and Apple touch metadata. It does **not** add offline caching or a service worker.
+- Install the published URL from Safari's **Share → Add to Home Screen**, or Chrome's **Install app / Add to Home screen**. Installation options vary by browser; the editor preview is not the installation target.
+- This remains a web-powered installed app, not an App Store or Play Store native package. Diagnosis and cloud data require internet access.
 
 ## 🧱 Tech Stack
 - **TanStack Start** (React 19, Vite 7, SSR) — TanStack Router for routing.

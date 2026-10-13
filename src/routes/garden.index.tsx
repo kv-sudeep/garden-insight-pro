@@ -18,6 +18,7 @@ import {
   ArchiveRestore,
   MapPin,
   Tag,
+  Map as MapIcon,
 } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/garden/")({
   head: () => ({
@@ -458,8 +460,8 @@ function Garden() {
 
   return (
     <MobileLayout>
-      <div className="px-6 pt-10 pb-24">
-        <div className="flex items-start justify-between gap-3">
+      <div className="px-5 pt-7 pb-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">My garden</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -468,8 +470,9 @@ function Garden() {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <Button asChild variant="outline" size="icon" title="Garden planner"><Link to="/garden/tools" aria-label="Garden planner"><MapIcon className="h-4 w-4" /></Link></Button>
             {pool.length > 0 && (
-              <button
+              <Button variant="secondary"
                 onClick={() => {
                   setSelecting((s) => !s);
                   setSelected(new Set());
@@ -477,22 +480,24 @@ function Garden() {
                 className="rounded-full bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-soft hover:bg-secondary"
               >
                 {selecting ? "Done" : "Select"}
-              </button>
+              </Button>
             )}
-            <button
+            <Button
               onClick={() => setAdding((a) => !a)}
               className="inline-flex items-center gap-1 rounded-full bg-leaf px-3 py-1.5 text-xs font-semibold text-leaf-foreground shadow-leaf hover:bg-leaf/90"
             >
               <Plus className="h-3.5 w-3.5" />
               Add plant
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Manual add form */}
-        {adding && (
-          <div className="mt-5 space-y-2 rounded-3xl bg-card p-4 shadow-soft">
-            <div className="text-sm font-semibold">Add a plant by hand</div>
+        <Sheet open={adding} onOpenChange={setAdding}>
+          <SheetContent side="bottom" className="mx-auto max-h-[85dvh] max-w-md overflow-y-auto rounded-t-2xl pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+            <SheetTitle>Add a plant by hand</SheetTitle>
+            <SheetDescription className="sr-only">Plant name, nickname, location and labels</SheetDescription>
+            <div className="mt-4 space-y-2">
             <Input
               value={newPlant.name}
               onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
@@ -579,8 +584,9 @@ function Garden() {
                 Cancel
               </Button>
             </div>
-          </div>
-        )}
+            </div>
+          </SheetContent>
+        </Sheet>
 
         {reminders.length > 0 && !showArchived && (
           <div className="mt-5 rounded-2xl border border-border bg-card p-4 shadow-soft">
@@ -590,7 +596,7 @@ function Garden() {
             </div>
             <ul className="space-y-1.5">
               {reminders.map((r, i) => {
-                const Icon = ACTIONS.find((a) => a.label === r.action)!.icon;
+                const Icon = ACTIONS.find((a) => a.label === r.action)?.icon ?? Droplets;
                 const overdue = r.daysLeft < 0;
                 const today = r.daysLeft === 0;
                 return (
@@ -917,7 +923,7 @@ function Garden() {
                       ) : (
                         <>
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="truncate font-semibold">{displayName(p)}</span>
+                            {selecting ? <span className="truncate font-semibold">{displayName(p)}</span> : <Link to="/garden/$plantId" params={{ plantId: p.id }} className="min-w-0 truncate py-1 font-semibold text-accent">{displayName(p)}</Link>}
                             {p.nickname?.trim() && (
                               <span className="truncate text-xs text-muted-foreground">({p.name})</span>
                             )}

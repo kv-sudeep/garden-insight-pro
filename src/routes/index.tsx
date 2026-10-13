@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device";
 import plantHero from "@/assets/plant-blue-hero.jpg";
 import diseaseLeaf from "@/assets/disease-leaf.jpg";
+import { InstallApp } from "@/components/InstallApp";
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
     { title: "KrushiMitra AI — Your Plant Doctor" },
@@ -24,7 +25,7 @@ function Index() {
   return <MobileLayout>
     <header className="flex items-center justify-between px-5 pb-4 pt-7">
       <Leaf className="neon-icon h-6 w-6"/><h1 className="text-xl font-bold italic">KrushiMitra<span className="text-accent"> AI</span></h1>
-      <Link to="/garden" aria-label="My garden" className="glass-panel flex h-9 w-9 items-center justify-center rounded-full"><Sprout className="h-4 w-4"/></Link>
+      <InstallApp />
     </header>
     <div className="px-5">
       <Link to="/guides" className="glass-panel mb-4 flex h-11 items-center gap-3 rounded-full px-4 text-xs text-muted-foreground"><Search className="h-4 w-4"/>Search plants, diseases, symptoms…</Link>
