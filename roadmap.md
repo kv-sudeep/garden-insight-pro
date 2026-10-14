@@ -5,6 +5,6 @@
 - [x] Verify navigation, scrolling and home-screen metadata.
 
 # Glow and motion
-- [ ] Add shared blue touch, hover and keyboard-focus glow to cards and controls.
-- [ ] Add animated, swipeable slideshows to home and splash screens.
-- [ ] Verify glow, slideshow controls and mobile layout.
+- [x] Add shared blue touch, hover and keyboard-focus glow to cards and controls.
+- [x] Add animated, swipeable slideshows to home and splash screens without pause or play buttons.
+- [x] Verify glow, slideshow controls and mobile layout.

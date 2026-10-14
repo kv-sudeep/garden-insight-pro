@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import plantHero from "@/assets/plant-blue-hero.jpg";
@@ -19,7 +18,6 @@ export function PlantSlideshow({ children, className, label, splash = false }: {
   splash?: boolean;
 }) {
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const touchStart = useRef<number | null>(null);
@@ -31,12 +29,12 @@ export function PlantSlideshow({ children, className, label, splash = false }: {
     return () => preference.removeEventListener("change", sync);
   }, []);
   useEffect(() => {
-    if (paused || interacting || reducedMotion) return;
+    if (interacting || reducedMotion) return;
     const timer = window.setInterval(() => {
       if (!document.hidden) setIndex(current => (current + 1) % slides.length);
     }, 5000);
     return () => window.clearInterval(timer);
-  }, [paused, interacting, reducedMotion]);
+  }, [interacting, reducedMotion]);
 
   return <div className={cn("plant-slideshow relative isolate overflow-hidden", className)} role="region" aria-roledescription="carousel" aria-label={label}
     onMouseEnter={() => setInteracting(true)} onMouseLeave={() => setInteracting(false)}
@@ -57,9 +55,6 @@ export function PlantSlideshow({ children, className, label, splash = false }: {
       {slides.map((slide, position) => <Button key={slide.title} variant="ghost" size="icon" className="slideshow-dot h-8 w-8 rounded-full hover:bg-secondary/50" aria-label={`Show slide ${position + 1}: ${slide.accent}`} aria-pressed={position === index} onClick={() => setIndex(position)}>
         <span className={cn("h-1.5 rounded-full transition-all duration-300", position === index ? "w-5 bg-primary" : "w-1.5 bg-muted-foreground")} />
       </Button>)}
-      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-foreground hover:bg-secondary/50" aria-label={paused || reducedMotion ? "Play slideshow" : "Pause slideshow"} title={paused || reducedMotion ? "Play slideshow" : "Pause slideshow"} onClick={() => { setReducedMotion(false); setPaused(current => !current); }}>
-        {paused || reducedMotion ? <Play className="h-3 w-3"/> : <Pause className="h-3 w-3"/>}
-      </Button>
     </div>
   </div>;
 }
