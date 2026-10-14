@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Camera, Search, Sprout, ShieldCheck, ScanLine, BookOpen, ArrowRight, ChevronRight, Leaf, Bug } from "lucide-react";
+import { Camera, Search, Sprout, ShieldCheck, ScanLine, BookOpen, ArrowRight, ChevronRight, Leaf, Bug, UserRound } from "lucide-react";
 import { MobileLayout } from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,7 +25,7 @@ function Index() {
   return <MobileLayout>
     <header className="home-enter flex items-center justify-between px-5 pb-4 pt-7">
       <Leaf className="neon-icon h-6 w-6"/><h1 className="text-xl font-bold italic">KrushiMitra<span className="text-accent"> AI</span></h1>
-      <InstallApp />
+      <div className="flex items-center gap-1"><InstallApp /><Link to="/auth" aria-label="Account" className="glass-panel flex h-9 w-9 items-center justify-center rounded-full"><UserRound className="h-4 w-4"/></Link></div>
     </header>
     <div className="px-5">
       <Link to="/guides" className="glass-panel mb-4 flex h-11 items-center gap-3 rounded-full px-4 text-xs text-muted-foreground"><Search className="h-4 w-4"/>Search plants, diseases, symptoms…</Link>
