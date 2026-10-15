@@ -4,7 +4,6 @@ import { Search, ArrowLeft, ChevronRight, SlidersHorizontal, ShieldCheck, Bug, L
 import { MobileLayout } from "@/components/MobileLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import diseaseLeaf from "@/assets/disease-leaf.jpg";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/guides/")({

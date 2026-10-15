@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Camera, ShieldCheck, Leaf, Activity, ArrowRight } from "lucide-react";
-import diseaseLeaf from "@/assets/disease-leaf.jpg";
 import { Button } from "@/components/ui/button";
 import { MobileLayout } from "@/components/MobileLayout";
 import { supabase } from "@/integrations/supabase/client";
