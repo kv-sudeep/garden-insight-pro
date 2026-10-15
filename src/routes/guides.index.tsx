@@ -35,6 +35,7 @@ type Disease = {
   affects: string | null;
   summary: string | null;
   severity: string | null;
+  image_url: string | null;
 };
 type Pest = {
   slug: string;
@@ -42,6 +43,7 @@ type Pest = {
   scientific_name: string | null;
   affects: string | null;
   summary: string | null;
+  image_url: string | null;
 };
 
 const KINDS = [
@@ -61,12 +63,12 @@ function Guides() {
   useEffect(() => {
     supabase
       .from("diseases")
-      .select("slug, name, kind, affects, summary, severity")
+      .select("slug, name, kind, affects, summary, severity, image_url")
       .order("name")
       .then(({ data }) => setDiseases((data as Disease[]) ?? []));
     supabase
       .from("pests")
-      .select("slug, name, scientific_name, affects, summary")
+      .select("slug, name, scientific_name, affects, summary, image_url")
       .order("name")
       .then(({ data }) => setPests((data as Pest[]) ?? []));
   }, []);
