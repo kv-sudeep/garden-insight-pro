@@ -11,7 +11,12 @@ export function SplashScreen({ duration = 2200 }: { duration?: number }) {
     if (sessionStorage.getItem("km_splash_seen")) setPhase("gone");
     setChecked(true);
   }, []);
-  const dismiss = () => { setPhase("out"); sessionStorage.setItem("km_splash_seen", "1"); };
+  const navigate = useNavigate();
+  const dismiss = async () => {
+    setPhase("out"); sessionStorage.setItem("km_splash_seen", "1");
+    const { data } = await supabase.auth.getUser();
+    navigate({ to: data.user ? "/" : "/auth" });
+  };
   useEffect(() => { if (phase !== "out") return; const timer = setTimeout(() => setPhase("gone"), Math.min(duration, 500)); return () => clearTimeout(timer); }, [phase, duration]);
   if (!checked || phase === "gone") return null;
   return <div className={`fixed inset-0 z-[100] overflow-y-auto bg-background transition-opacity duration-500 ${phase === "out" ? "pointer-events-none opacity-0" : "opacity-100"}`}>
