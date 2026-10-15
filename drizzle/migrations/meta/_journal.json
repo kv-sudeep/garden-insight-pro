@@ -29,6 +29,13 @@
       "when": 1790134303741,
       "tag": "0003_garden_full_features",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792036544599,
+      "tag": "0004_guide_image_columns",
+      "breakpoints": true
     }
   ]
 }
