@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlantSlideshow } from "@/components/PlantSlideshow";
+import { supabase } from "@/integrations/supabase/client";
 export function SplashScreen({ duration = 2200 }: { duration?: number }) {
   const [phase, setPhase] = useState<"in" | "out" | "gone">("in");
   const [checked, setChecked] = useState(false);
