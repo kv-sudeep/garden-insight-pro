@@ -20,6 +20,7 @@ export type Database = {
           causes: string | null
           created_at: string
           id: string
+          image_url: string | null
           kind: string
           name: string
           organic_treatment: string | null
@@ -36,6 +37,7 @@ export type Database = {
           causes?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           kind?: string
           name: string
           organic_treatment?: string | null
@@ -52,6 +54,7 @@ export type Database = {
           causes?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           kind?: string
           name?: string
           organic_treatment?: string | null
@@ -246,6 +249,7 @@ export type Database = {
           damage: string | null
           id: string
           identify: string | null
+          image_url: string | null
           lifecycle: string | null
           name: string
           organic_treatment: string | null
@@ -261,6 +265,7 @@ export type Database = {
           damage?: string | null
           id?: string
           identify?: string | null
+          image_url?: string | null
           lifecycle?: string | null
           name: string
           organic_treatment?: string | null
@@ -276,6 +281,7 @@ export type Database = {
           damage?: string | null
           id?: string
           identify?: string | null
+          image_url?: string | null
           lifecycle?: string | null
           name?: string
           organic_treatment?: string | null

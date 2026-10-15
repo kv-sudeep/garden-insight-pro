@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Camera, ShieldCheck, Leaf, Activity, ArrowRight } from "lucide-react";
-import diseaseLeaf from "@/assets/disease-leaf.jpg";
 import { Button } from "@/components/ui/button";
 import { MobileLayout } from "@/components/MobileLayout";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,6 +39,7 @@ type Disease = {
   organic_treatment: string | null;
   prevention: string | null;
   severity: string | null;
+  image_url: string | null;
 };
 
 function DiseaseGuide() {
@@ -79,7 +79,7 @@ function DiseaseGuide() {
         <h1 className="text-2xl font-bold">{item.name}</h1>
         {item.pathogen && <p className="mt-1 text-xs italic text-muted-foreground">{item.pathogen}</p>}
         <div className="mt-3 text-[10px] capitalize text-accent">{item.kind} · {item.severity || "Plant health"}</div>
-        {item.slug === "powdery-mildew" ? <figure className="my-4"><img src={diseaseLeaf} alt="Illustrative leaf with powdery mildew" width={1024} height={768} className="aspect-[4/3] w-full rounded-lg object-cover"/><figcaption className="mt-1 text-[9px] text-muted-foreground">Illustrative disease appearance</figcaption></figure> : <div className="my-4 flex h-44 items-center justify-center"><Leaf className="neon-icon h-28 w-28" strokeWidth={0.7}/></div>}
+        {item.image_url ? <figure className="my-4"><img src={item.image_url} alt={`${item.name} on a plant`} className="aspect-[4/3] w-full rounded-lg object-cover"/><figcaption className="mt-1 text-[9px] text-muted-foreground">Typical appearance</figcaption></figure> : <div className="my-4 flex h-44 items-center justify-center"><Leaf className="neon-icon h-28 w-28" strokeWidth={0.7}/></div>}
         <div className="mb-5 grid grid-cols-3 gap-2">
           <div className="glass-panel rounded-lg p-3 text-center"><Activity className="mx-auto mb-2 h-4 w-4 text-accent"/><p className="text-[9px] text-muted-foreground">Severity</p><p className="mt-1 text-xs capitalize">{item.severity || "Varies"}</p></div>
           <div className="glass-panel rounded-lg p-3 text-center"><Leaf className="mx-auto mb-2 h-4 w-4 text-accent"/><p className="text-[9px] text-muted-foreground">Category</p><p className="mt-1 text-xs capitalize">{item.kind}</p></div>

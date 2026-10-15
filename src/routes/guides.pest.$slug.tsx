@@ -37,6 +37,7 @@ type Pest = {
   treatment: string | null;
   organic_treatment: string | null;
   prevention: string | null;
+  image_url: string | null;
 };
 
 function PestGuide() {
@@ -89,6 +90,7 @@ function PestGuide() {
       </div>
 
       <div className="px-6 pt-6">
+        {item.image_url && <figure className="mb-5"><img src={item.image_url} alt={item.name} className="aspect-[4/3] w-full rounded-lg object-cover"/><figcaption className="mt-1 text-[9px] text-muted-foreground">Typical appearance</figcaption></figure>}
         <GuideSection title="Affects" body={item.affects} />
         <GuideSection title="How to spot it" body={item.identify} />
         <GuideSection title="Damage it causes" body={item.damage} />
