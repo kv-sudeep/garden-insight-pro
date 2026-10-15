@@ -82,6 +82,7 @@ function Guides() {
         sub: d.affects,
         summary: d.summary,
         badge: d.severity,
+        image: d.image_url,
         type: "disease" as const,
       })),
       ...pests.map((p) => ({
@@ -91,6 +92,7 @@ function Guides() {
         sub: p.affects,
         summary: p.summary,
         badge: null as string | null,
+        image: p.image_url,
         type: "pest" as const,
       })),
     ];
@@ -156,7 +158,7 @@ function Guides() {
               className="glass-panel flex min-h-28 overflow-hidden rounded-lg transition-transform hover:-translate-y-0.5"
             >
               <div className="flex w-28 shrink-0 items-center justify-center bg-background/50">
-                {r.slug === "powdery-mildew" ? <img src={diseaseLeaf} alt="Illustrative powdery mildew leaf" width={1024} height={768} className="h-full w-full object-cover"/> : r.type === "pest" ? <Bug className="neon-icon h-12 w-12" strokeWidth={1.1}/> : r.kind === "deficiency" ? <Leaf className="neon-icon h-12 w-12" strokeWidth={1.1}/> : <ShieldCheck className="neon-icon h-12 w-12" strokeWidth={1.1}/>}
+                {r.image ? <img src={r.image} alt={r.name} loading="lazy" className="h-full w-full object-cover"/> : r.type === "pest" ? <Bug className="neon-icon h-12 w-12" strokeWidth={1.1}/> : r.kind === "deficiency" ? <Leaf className="neon-icon h-12 w-12" strokeWidth={1.1}/> : <ShieldCheck className="neon-icon h-12 w-12" strokeWidth={1.1}/>}
               </div>
               <div className="min-w-0 flex-1 p-3">
                 <div className="flex items-center justify-between gap-2"><h2 className="text-sm font-semibold">{r.name}</h2><ChevronRight className="h-4 w-4 shrink-0 text-accent"/></div>
