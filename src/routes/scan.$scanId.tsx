@@ -26,7 +26,7 @@ export const Route = createFileRoute("/scan/$scanId")({
     { name: "twitter:card", content: "summary" },
   ] }),
   component: ScanDetail,
-  errorComponent: ({ error, reset }) => {
+  errorComponent: ({ error, reset }: { error: Error; reset: () => void }) => {
     const router = useRouter();
     return (
       <MobileLayout>
