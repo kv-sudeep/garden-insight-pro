@@ -9,58 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ScanRouteImport } from './routes/scan'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as LibraryRouteImport } from './routes/library'
-import { Route as IdentifyRouteImport } from './routes/identify'
-import { Route as GuidesRouteImport } from './routes/guides'
-import { Route as GardenRouteImport } from './routes/garden'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ScanIndexRouteImport } from './routes/scan.index'
-import { Route as LibraryIndexRouteImport } from './routes/library.index'
-import { Route as IdentifyIndexRouteImport } from './routes/identify.index'
-import { Route as GuidesIndexRouteImport } from './routes/guides.index'
-import { Route as GardenIndexRouteImport } from './routes/garden.index'
-import { Route as ScanScanIdRouteImport } from './routes/scan.$scanId'
-import { Route as LibraryPlantIdRouteImport } from './routes/library.$plantId'
-import { Route as IdentifyIdIdRouteImport } from './routes/identify.$idId'
-import { Route as GardenToolsRouteImport } from './routes/garden.tools'
-import { Route as GardenPlantIdRouteImport } from './routes/garden.$plantId'
-import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as GardenRouteImport } from './routes/garden'
+import { Route as GuidesRouteImport } from './routes/guides'
+import { Route as IdentifyRouteImport } from './routes/identify'
+import { Route as LibraryRouteImport } from './routes/library'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ScanRouteImport } from './routes/scan'
 import { Route as ApiIdentifyRouteImport } from './routes/api/identify'
-import { Route as GuidesPestSlugRouteImport } from './routes/guides.pest.$slug'
-import { Route as GuidesDiseaseSlugRouteImport } from './routes/guides.disease.$slug'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
+import { Route as GardenIndexRouteImport } from './routes/garden.index'
+import { Route as GardenPlantIdRouteImport } from './routes/garden.$plantId'
+import { Route as GardenToolsRouteImport } from './routes/garden.tools'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as IdentifyIndexRouteImport } from './routes/identify.index'
+import { Route as IdentifyIdIdRouteImport } from './routes/identify.$idId'
+import { Route as LibraryIndexRouteImport } from './routes/library.index'
+import { Route as LibraryPlantIdRouteImport } from './routes/library.$plantId'
+import { Route as ScanIndexRouteImport } from './routes/scan.index'
+import { Route as ScanScanIdRouteImport } from './routes/scan.$scanId'
 import { Route as GardenRetirePlantIdRouteImport } from './routes/garden.retire.$plantId'
+import { Route as GuidesDiseaseSlugRouteImport } from './routes/guides.disease.$slug'
+import { Route as GuidesPestSlugRouteImport } from './routes/guides.pest.$slug'
 
-const ScanRoute = ScanRouteImport.update({
-  id: '/scan',
-  path: '/scan',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LibraryRoute = LibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IdentifyRoute = IdentifyRouteImport.update({
-  id: '/identify',
-  path: '/identify',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GuidesRoute = GuidesRouteImport.update({
-  id: '/guides',
-  path: '/guides',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GardenRoute = GardenRouteImport.update({
-  id: '/garden',
-  path: '/garden',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -68,64 +43,34 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const GardenRoute = GardenRouteImport.update({
+  id: '/garden',
+  path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ScanIndexRoute = ScanIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ScanRoute,
+const GuidesRoute = GuidesRouteImport.update({
+  id: '/guides',
+  path: '/guides',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const LibraryIndexRoute = LibraryIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LibraryRoute,
+const IdentifyRoute = IdentifyRouteImport.update({
+  id: '/identify',
+  path: '/identify',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const IdentifyIndexRoute = IdentifyIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => IdentifyRoute,
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const GuidesIndexRoute = GuidesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => GuidesRoute,
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const GardenIndexRoute = GardenIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => GardenRoute,
-} as any)
-const ScanScanIdRoute = ScanScanIdRouteImport.update({
-  id: '/$scanId',
-  path: '/$scanId',
-  getParentRoute: () => ScanRoute,
-} as any)
-const LibraryPlantIdRoute = LibraryPlantIdRouteImport.update({
-  id: '/$plantId',
-  path: '/$plantId',
-  getParentRoute: () => LibraryRoute,
-} as any)
-const IdentifyIdIdRoute = IdentifyIdIdRouteImport.update({
-  id: '/$idId',
-  path: '/$idId',
-  getParentRoute: () => IdentifyRoute,
-} as any)
-const GardenToolsRoute = GardenToolsRouteImport.update({
-  id: '/tools',
-  path: '/tools',
-  getParentRoute: () => GardenRoute,
-} as any)
-const GardenPlantIdRoute = GardenPlantIdRouteImport.update({
-  id: '/$plantId',
-  path: '/$plantId',
-  getParentRoute: () => GardenRoute,
-} as any)
-const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
-  id: '/api/transcribe',
-  path: '/api/transcribe',
+const ScanRoute = ScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiIdentifyRoute = ApiIdentifyRouteImport.update({
@@ -133,20 +78,75 @@ const ApiIdentifyRoute = ApiIdentifyRouteImport.update({
   path: '/api/identify',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuidesPestSlugRoute = GuidesPestSlugRouteImport.update({
-  id: '/pest/$slug',
-  path: '/pest/$slug',
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GardenIndexRoute = GardenIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GardenRoute,
+} as any)
+const GardenPlantIdRoute = GardenPlantIdRouteImport.update({
+  id: '/$plantId',
+  path: '/$plantId',
+  getParentRoute: () => GardenRoute,
+} as any)
+const GardenToolsRoute = GardenToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => GardenRoute,
+} as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => GuidesRoute,
+} as any)
+const IdentifyIndexRoute = IdentifyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => IdentifyRoute,
+} as any)
+const IdentifyIdIdRoute = IdentifyIdIdRouteImport.update({
+  id: '/$idId',
+  path: '/$idId',
+  getParentRoute: () => IdentifyRoute,
+} as any)
+const LibraryIndexRoute = LibraryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LibraryRoute,
+} as any)
+const LibraryPlantIdRoute = LibraryPlantIdRouteImport.update({
+  id: '/$plantId',
+  path: '/$plantId',
+  getParentRoute: () => LibraryRoute,
+} as any)
+const ScanIndexRoute = ScanIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ScanRoute,
+} as any)
+const ScanScanIdRoute = ScanScanIdRouteImport.update({
+  id: '/$scanId',
+  path: '/$scanId',
+  getParentRoute: () => ScanRoute,
+} as any)
+const GardenRetirePlantIdRoute = GardenRetirePlantIdRouteImport.update({
+  id: '/retire/$plantId',
+  path: '/retire/$plantId',
+  getParentRoute: () => GardenRoute,
 } as any)
 const GuidesDiseaseSlugRoute = GuidesDiseaseSlugRouteImport.update({
   id: '/disease/$slug',
   path: '/disease/$slug',
   getParentRoute: () => GuidesRoute,
 } as any)
-const GardenRetirePlantIdRoute = GardenRetirePlantIdRouteImport.update({
-  id: '/retire/$plantId',
-  path: '/retire/$plantId',
-  getParentRoute: () => GardenRoute,
+const GuidesPestSlugRoute = GuidesPestSlugRouteImport.update({
+  id: '/pest/$slug',
+  path: '/pest/$slug',
+  getParentRoute: () => GuidesRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -308,46 +308,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/scan': {
-      id: '/scan'
-      path: '/scan'
-      fullPath: '/scan'
-      preLoaderRoute: typeof ScanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/library': {
-      id: '/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof LibraryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/identify': {
-      id: '/identify'
-      path: '/identify'
-      fullPath: '/identify'
-      preLoaderRoute: typeof IdentifyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/guides': {
-      id: '/guides'
-      path: '/guides'
-      fullPath: '/guides'
-      preLoaderRoute: typeof GuidesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/garden': {
-      id: '/garden'
-      path: '/garden'
-      fullPath: '/garden'
-      preLoaderRoute: typeof GardenRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -357,88 +322,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/garden': {
+      id: '/garden'
+      path: '/garden'
+      fullPath: '/garden'
+      preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/scan/': {
-      id: '/scan/'
-      path: '/'
-      fullPath: '/scan/'
-      preLoaderRoute: typeof ScanIndexRouteImport
-      parentRoute: typeof ScanRoute
+    '/guides': {
+      id: '/guides'
+      path: '/guides'
+      fullPath: '/guides'
+      preLoaderRoute: typeof GuidesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/library/': {
-      id: '/library/'
-      path: '/'
-      fullPath: '/library/'
-      preLoaderRoute: typeof LibraryIndexRouteImport
-      parentRoute: typeof LibraryRoute
+    '/identify': {
+      id: '/identify'
+      path: '/identify'
+      fullPath: '/identify'
+      preLoaderRoute: typeof IdentifyRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/identify/': {
-      id: '/identify/'
-      path: '/'
-      fullPath: '/identify/'
-      preLoaderRoute: typeof IdentifyIndexRouteImport
-      parentRoute: typeof IdentifyRoute
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/guides/': {
-      id: '/guides/'
-      path: '/'
-      fullPath: '/guides/'
-      preLoaderRoute: typeof GuidesIndexRouteImport
-      parentRoute: typeof GuidesRoute
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/garden/': {
-      id: '/garden/'
-      path: '/'
-      fullPath: '/garden/'
-      preLoaderRoute: typeof GardenIndexRouteImport
-      parentRoute: typeof GardenRoute
-    }
-    '/scan/$scanId': {
-      id: '/scan/$scanId'
-      path: '/$scanId'
-      fullPath: '/scan/$scanId'
-      preLoaderRoute: typeof ScanScanIdRouteImport
-      parentRoute: typeof ScanRoute
-    }
-    '/library/$plantId': {
-      id: '/library/$plantId'
-      path: '/$plantId'
-      fullPath: '/library/$plantId'
-      preLoaderRoute: typeof LibraryPlantIdRouteImport
-      parentRoute: typeof LibraryRoute
-    }
-    '/identify/$idId': {
-      id: '/identify/$idId'
-      path: '/$idId'
-      fullPath: '/identify/$idId'
-      preLoaderRoute: typeof IdentifyIdIdRouteImport
-      parentRoute: typeof IdentifyRoute
-    }
-    '/garden/tools': {
-      id: '/garden/tools'
-      path: '/tools'
-      fullPath: '/garden/tools'
-      preLoaderRoute: typeof GardenToolsRouteImport
-      parentRoute: typeof GardenRoute
-    }
-    '/garden/$plantId': {
-      id: '/garden/$plantId'
-      path: '/$plantId'
-      fullPath: '/garden/$plantId'
-      preLoaderRoute: typeof GardenPlantIdRouteImport
-      parentRoute: typeof GardenRoute
-    }
-    '/api/transcribe': {
-      id: '/api/transcribe'
-      path: '/api/transcribe'
-      fullPath: '/api/transcribe'
-      preLoaderRoute: typeof ApiTranscribeRouteImport
+    '/scan': {
+      id: '/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof ScanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/identify': {
@@ -448,12 +371,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiIdentifyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guides/pest/$slug': {
-      id: '/guides/pest/$slug'
-      path: '/pest/$slug'
-      fullPath: '/guides/pest/$slug'
-      preLoaderRoute: typeof GuidesPestSlugRouteImport
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garden/': {
+      id: '/garden/'
+      path: '/'
+      fullPath: '/garden/'
+      preLoaderRoute: typeof GardenIndexRouteImport
+      parentRoute: typeof GardenRoute
+    }
+    '/garden/$plantId': {
+      id: '/garden/$plantId'
+      path: '/$plantId'
+      fullPath: '/garden/$plantId'
+      preLoaderRoute: typeof GardenPlantIdRouteImport
+      parentRoute: typeof GardenRoute
+    }
+    '/garden/tools': {
+      id: '/garden/tools'
+      path: '/tools'
+      fullPath: '/garden/tools'
+      preLoaderRoute: typeof GardenToolsRouteImport
+      parentRoute: typeof GardenRoute
+    }
+    '/guides/': {
+      id: '/guides/'
+      path: '/'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
       parentRoute: typeof GuidesRoute
+    }
+    '/identify/': {
+      id: '/identify/'
+      path: '/'
+      fullPath: '/identify/'
+      preLoaderRoute: typeof IdentifyIndexRouteImport
+      parentRoute: typeof IdentifyRoute
+    }
+    '/identify/$idId': {
+      id: '/identify/$idId'
+      path: '/$idId'
+      fullPath: '/identify/$idId'
+      preLoaderRoute: typeof IdentifyIdIdRouteImport
+      parentRoute: typeof IdentifyRoute
+    }
+    '/library/': {
+      id: '/library/'
+      path: '/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof LibraryIndexRouteImport
+      parentRoute: typeof LibraryRoute
+    }
+    '/library/$plantId': {
+      id: '/library/$plantId'
+      path: '/$plantId'
+      fullPath: '/library/$plantId'
+      preLoaderRoute: typeof LibraryPlantIdRouteImport
+      parentRoute: typeof LibraryRoute
+    }
+    '/scan/': {
+      id: '/scan/'
+      path: '/'
+      fullPath: '/scan/'
+      preLoaderRoute: typeof ScanIndexRouteImport
+      parentRoute: typeof ScanRoute
+    }
+    '/scan/$scanId': {
+      id: '/scan/$scanId'
+      path: '/$scanId'
+      fullPath: '/scan/$scanId'
+      preLoaderRoute: typeof ScanScanIdRouteImport
+      parentRoute: typeof ScanRoute
+    }
+    '/garden/retire/$plantId': {
+      id: '/garden/retire/$plantId'
+      path: '/retire/$plantId'
+      fullPath: '/garden/retire/$plantId'
+      preLoaderRoute: typeof GardenRetirePlantIdRouteImport
+      parentRoute: typeof GardenRoute
     }
     '/guides/disease/$slug': {
       id: '/guides/disease/$slug'
@@ -462,12 +462,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuidesDiseaseSlugRouteImport
       parentRoute: typeof GuidesRoute
     }
-    '/garden/retire/$plantId': {
-      id: '/garden/retire/$plantId'
-      path: '/retire/$plantId'
-      fullPath: '/garden/retire/$plantId'
-      preLoaderRoute: typeof GardenRetirePlantIdRouteImport
-      parentRoute: typeof GardenRoute
+    '/guides/pest/$slug': {
+      id: '/guides/pest/$slug'
+      path: '/pest/$slug'
+      fullPath: '/guides/pest/$slug'
+      preLoaderRoute: typeof GuidesPestSlugRouteImport
+      parentRoute: typeof GuidesRoute
     }
   }
 }
