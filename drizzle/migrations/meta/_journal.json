@@ -36,6 +36,13 @@
       "when": 1792036544599,
       "tag": "0004_guide_image_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792139694865,
+      "tag": "0005_farmer_profiles",
+      "breakpoints": true
     }
   ]
 }
