@@ -26,12 +26,12 @@ export const Route = createFileRoute("/scan/$scanId")({
     { name: "twitter:card", content: "summary" },
   ] }),
   component: ScanDetail,
-  errorComponent: ({ error, reset }: { error: Error; reset: () => void }) => {
+  errorComponent: ({ error, reset }: { error: unknown; reset: () => void }) => {
     const router = useRouter();
     return (
       <MobileLayout>
         <div className="px-6 py-12 text-center">
-          <p className="text-sm text-danger">{error.message}</p>
+          <p className="text-sm text-danger">{error instanceof Error ? error.message : "Something went wrong."}</p>
           <Button
             className="mt-4"
             onClick={() => {
