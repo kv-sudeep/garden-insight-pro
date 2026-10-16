@@ -8,6 +8,8 @@ import { getDeviceId } from "@/lib/device";
 import diseaseLeaf from "@/assets/disease-leaf.jpg";
 import { PlantSlideshow } from "@/components/PlantSlideshow";
 import { InstallApp } from "@/components/InstallApp";
+import { SymptomChecker } from "@/components/SymptomChecker";
+import { FarmRecommendations } from "@/components/FarmRecommendations";
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
     { title: "KrushiMitra AI — Your Plant Doctor" },
@@ -39,6 +41,8 @@ function Index() {
       <div className="home-actions my-4 grid grid-cols-5 gap-2">
         {actions.map(({to,label,icon:Icon}) => <Link key={to} to={to} className="glass-panel flex h-[78px] flex-col items-center justify-center gap-2 rounded-lg text-center text-[9px]"><Icon className="neon-icon h-6 w-6" strokeWidth={1.4}/>{label}</Link>)}
       </div>
+      <SymptomChecker />
+      <FarmRecommendations />
       <section className="home-enter home-enter-later mt-6">
         <div className="mb-3 flex items-center justify-between"><h2 className="text-sm font-semibold">Plant Health Guides</h2><Link to="/guides" className="flex items-center text-[11px] text-accent">View All <ChevronRight className="h-3 w-3"/></Link></div>
         <div className="grid grid-cols-2 gap-3">

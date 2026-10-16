@@ -5,6 +5,7 @@ import { MobileLayout } from "@/components/MobileLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { FarmRecommendations } from "@/components/FarmRecommendations";
 
 export const Route = createFileRoute("/guides/")({
   head: () => ({

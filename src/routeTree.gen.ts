@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as FarmRouteImport } from './routes/farm'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as IdentifyRouteImport } from './routes/identify'
@@ -41,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmRoute = FarmRouteImport.update({
+  id: '/farm',
+  path: '/farm',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GardenRoute = GardenRouteImport.update({
@@ -152,6 +158,7 @@ const GuidesPestSlugRoute = GuidesPestSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/farm': typeof FarmRoute
   '/garden': typeof GardenRouteWithChildren
   '/guides': typeof GuidesRouteWithChildren
   '/identify': typeof IdentifyRouteWithChildren
@@ -177,6 +184,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/farm': typeof FarmRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/identify': typeof ApiIdentifyRoute
   '/api/transcribe': typeof ApiTranscribeRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/farm': typeof FarmRoute
   '/garden': typeof GardenRouteWithChildren
   '/guides': typeof GuidesRouteWithChildren
   '/identify': typeof IdentifyRouteWithChildren
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/farm'
     | '/garden'
     | '/guides'
     | '/identify'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/farm'
     | '/reset-password'
     | '/api/identify'
     | '/api/transcribe'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/farm'
     | '/garden'
     | '/guides'
     | '/identify'
@@ -296,6 +308,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  FarmRoute: typeof FarmRoute
   GardenRoute: typeof GardenRouteWithChildren
   GuidesRoute: typeof GuidesRouteWithChildren
   IdentifyRoute: typeof IdentifyRouteWithChildren
@@ -320,6 +333,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm': {
+      id: '/farm'
+      path: '/farm'
+      fullPath: '/farm'
+      preLoaderRoute: typeof FarmRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/garden': {
@@ -546,6 +566,7 @@ const ScanRouteWithChildren = ScanRoute._addFileChildren(ScanRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  FarmRoute: FarmRoute,
   GardenRoute: GardenRouteWithChildren,
   GuidesRoute: GuidesRouteWithChildren,
   IdentifyRoute: IdentifyRouteWithChildren,

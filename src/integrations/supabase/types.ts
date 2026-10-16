@@ -68,6 +68,33 @@ export type Database = {
         }
         Relationships: []
       }
+      farmer_profiles: {
+        Row: {
+          crops: string[]
+          disease_history: Json
+          farm_name: string
+          fields: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          crops?: string[]
+          disease_history?: Json
+          farm_name?: string
+          fields?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          crops?: string[]
+          disease_history?: Json
+          farm_name?: string
+          fields?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       garden_plants: {
         Row: {
           acquired_on: string | null
